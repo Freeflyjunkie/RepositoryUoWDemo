@@ -1,0 +1,76 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminPureGold.Domain", "AdminPureGold.Domain\AdminPureGold.Domain.csproj", "{B72489AB-1051-4358-A0D8-BFF7880B9E9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminPureGold.Repositories", "AdminPureGold.Repositories\AdminPureGold.Repositories.csproj", "{D3C1E616-8351-418B-A2ED-C1C9BD877DF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminPureGold.WebUI", "AdminPureGold.WebUI\AdminPureGold.WebUI.csproj", "{39C4B67D-E926-4883-9128-74DE5B9F90E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminPureGold.ApplicationServices", "AdminPureGold.ApplicationServices\AdminPureGold.ApplicationServices.csproj", "{F2F0E5BA-73C6-4A84-8D8D-07B3C1A41936}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminPureGold.Test", "AdminPureGold.Test\AdminPureGold.Test.csproj", "{7498796F-4454-45B1-8AE2-6ECDB28E49BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminPureGold.EmailReminderService", "AdminPureGold.EmailReminderService\AdminPureGold.EmailReminderService.csproj", "{081F5100-0C4D-44DA-9B5E-51437FB9AB58}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://wco-sqlfound02p:8080/tfs/weichertone_applications
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = AdminPureGold.Domain\\AdminPureGold.Domain.csproj
+		SccProjectName1 = AdminPureGold.Domain
+		SccLocalPath1 = AdminPureGold.Domain
+		SccProjectUniqueName2 = AdminPureGold.Repositories\\AdminPureGold.Repositories.csproj
+		SccProjectName2 = AdminPureGold.Repositories
+		SccLocalPath2 = AdminPureGold.Repositories
+		SccProjectUniqueName3 = AdminPureGold.WebUI\\AdminPureGold.WebUI.csproj
+		SccProjectName3 = AdminPureGold.WebUI
+		SccLocalPath3 = AdminPureGold.WebUI
+		SccProjectUniqueName4 = AdminPureGold.ApplicationServices\\AdminPureGold.ApplicationServices.csproj
+		SccProjectName4 = AdminPureGold.ApplicationServices
+		SccLocalPath4 = AdminPureGold.ApplicationServices
+		SccProjectUniqueName5 = AdminPureGold.Test\\AdminPureGold.Test.csproj
+		SccProjectName5 = AdminPureGold.Test
+		SccLocalPath5 = AdminPureGold.Test
+		SccProjectUniqueName6 = AdminPureGold.EmailReminderService\\AdminPureGold.EmailReminderService.csproj
+		SccProjectName6 = AdminPureGold.EmailReminderService
+		SccLocalPath6 = AdminPureGold.EmailReminderService
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B72489AB-1051-4358-A0D8-BFF7880B9E9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B72489AB-1051-4358-A0D8-BFF7880B9E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B72489AB-1051-4358-A0D8-BFF7880B9E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B72489AB-1051-4358-A0D8-BFF7880B9E9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3C1E616-8351-418B-A2ED-C1C9BD877DF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3C1E616-8351-418B-A2ED-C1C9BD877DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3C1E616-8351-418B-A2ED-C1C9BD877DF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3C1E616-8351-418B-A2ED-C1C9BD877DF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39C4B67D-E926-4883-9128-74DE5B9F90E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39C4B67D-E926-4883-9128-74DE5B9F90E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39C4B67D-E926-4883-9128-74DE5B9F90E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39C4B67D-E926-4883-9128-74DE5B9F90E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2F0E5BA-73C6-4A84-8D8D-07B3C1A41936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2F0E5BA-73C6-4A84-8D8D-07B3C1A41936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2F0E5BA-73C6-4A84-8D8D-07B3C1A41936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2F0E5BA-73C6-4A84-8D8D-07B3C1A41936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7498796F-4454-45B1-8AE2-6ECDB28E49BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7498796F-4454-45B1-8AE2-6ECDB28E49BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7498796F-4454-45B1-8AE2-6ECDB28E49BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7498796F-4454-45B1-8AE2-6ECDB28E49BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{081F5100-0C4D-44DA-9B5E-51437FB9AB58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{081F5100-0C4D-44DA-9B5E-51437FB9AB58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{081F5100-0C4D-44DA-9B5E-51437FB9AB58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{081F5100-0C4D-44DA-9B5E-51437FB9AB58}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

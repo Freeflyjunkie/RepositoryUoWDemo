@@ -1,0 +1,81 @@
+﻿.agent-office-details {
+}
+
+.details-window {
+}
+
+.agent-photo {
+    height: 80px;
+    -ms-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 3px 3px 3px #c0c0c0;
+    -ms-box-shadow: 3px 3px 3px #c0c0c0;
+    box-shadow: 3px 3px 3px #c0c0c0;
+}
+
+h5 {
+    -webkit-text-shadow: 5px 5px 5px #c0c0c0;
+    -ms-text-shadow: 5px 5px 5px #c0c0c0;
+    text-shadow: 5px 5px 5px #c0c0c0;        
+}
+
+.validPropertyInformation {
+    padding-left: 9px;
+    color: #009d14;
+    font-size: 14px;
+    -ms-text-shadow: 2px 2px 2px #c0c0c0;
+    -webkit-text-shadow: 2px 2px 2px #c0c0c0;
+    text-shadow: 2px 2px 2px #c0c0c0;
+    cursor: pointer;
+}
+
+.quaziValidPropertyInformation {
+    padding-left: 9px;
+    color: #0026ff;
+    font-size: 14px;
+    -ms-text-shadow: 2px 2px 2px #c0c0c0;
+    -webkit-text-shadow: 2px 2px 2px #c0c0c0;
+    text-shadow: 2px 2px 2px #c0c0c0;
+    cursor: pointer;
+}
+
+.inValidPropertyInformation {
+    padding-left: 9px;
+    color: #ff0000;
+    font-size: 14px;
+    -ms-text-shadow: 2px 2px 2px #c0c0c0;
+    -webkit-text-shadow: 2px 2px 2px #c0c0c0;
+    text-shadow: 2px 2px 2px #c0c0c0;
+    cursor: pointer;
+}
+
+.transaction-data-textbox {
+    /*width: 280px;*/
+}
+
+.form-horizontal .control-label {
+    text-align: left;
+}
+
+.form-group label {
+    font-weight: 900;
+}
+
+.agent-table-inactive-agent {
+    background-color: #d3d3d3;
+}
+
+#agentSelection {
+    width: 380px;
+}
+
+#agentDropDown {
+    width: 380px;
+    max-height: 200px;
+    overflow: auto;
+}
+
+.usps-validation-description {
+    font-weight: 500;
+    font-size: 8pt;    
+}

@@ -1,0 +1,8 @@
+﻿h3 {
+    margin: 0px;
+    padding: 0px;
+    color: green;
+     -webkit-text-shadow: 5px 5px 5px #c0c0c0;
+    -ms-text-shadow: 5px 5px 5px #c0c0c0;
+    text-shadow: 5px 5px 5px #c0c0c0;
+}

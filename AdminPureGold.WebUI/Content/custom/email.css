@@ -1,0 +1,56 @@
+﻿h3 {
+    margin-top: 0px;
+}
+
+.hidden
+{
+    display:none;
+}
+
+#printTypeSelection {
+    height: 28px;
+    width: 150px;
+    padding: 5px 5px 5px 5px;
+    border: 1px solid #c0c0c0;
+}
+
+#month1Selection, #month2Selection {
+    height: 28px;
+    width: 30px;
+    padding: 5px 5px 5px 5px;
+    border: 1px solid #c0c0c0;
+}
+
+#year1Selection, #year2Selection  {
+    height: 28px;
+    width: 50px;
+    padding: 5px 5px 5px 5px;
+    border: 1px solid #c0c0c0;
+}
+
+
+#printTypeDropDown {
+    width: 70px;
+    border: 1px solid #c0c0c0;
+}
+
+#month1DropDown, #year1DropDown, #month2DropDown, #year2DropDown {
+    width: 10px;
+    border: 1px solid #c0c0c0;
+}
+
+.type-date-filter-table {
+    width: 660px;    
+}
+
+.modal-body {
+    padding-top: 0px;
+}
+
+.comment-textarea {
+    -moz-resize: none; 
+    -ms-resize: none; 
+    -o-resize: none; 
+    resize: none; 
+    text-align: left
+}

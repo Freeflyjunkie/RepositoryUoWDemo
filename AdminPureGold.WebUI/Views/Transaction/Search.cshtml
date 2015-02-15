@@ -1,0 +1,196 @@
+﻿@model IEnumerable<AdminPureGold.WebUI.ViewModels.SearchViewModel>
+
+@section header
+{
+    <h2>Customer List Search</h2>
+}
+<article class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <table>
+        <tr>
+            <td>
+                @using (Html.BeginForm("SearchBy", "Transaction", FormMethod.Get))
+                {
+                    @Html.AntiForgeryToken()
+                    <table class="table table-condensed table-responsive sidebar-shadow cat-status-filter-table">
+                        <tr>
+                            <td>
+                                <div class="dropdown">
+                                    <div style="float: left" id="typeSelection">Reference Number</div>
+                                    <div class="btn btn-xs btn-default" data-toggle="dropdown"><span class="caret"></span></div>
+                                    <ul class="dropdown-menu" id="typeDropdown">
+                                        <li><a href="#" data-placeholder-text="numbers only please" data-search-type="1">Transaction Id</a></li>
+                                        <li><a href="#" data-placeholder-text="numbers only please" data-search-type="2">Reference Number</a></li>
+                                        <li><a href="#" data-placeholder-text="last name" data-search-type="3">Customer Name</a></li>
+                                        <li><a href="#" data-placeholder-text="last name, first name or associate number" data-search-type="4">Agent</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td>
+                                <input id="search" name="search" type="text" placeholder="numbers only please" />
+                                <input id="searchType" name="searchType" type="hidden" value="2" />
+                                <input id="page" name="page" type="hidden" value="1" />
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-xs btn-primary">Search</button>
+                            </td>
+                        </tr>
+                    </table>
+                }
+            </td>
+        </tr>
+    </table>
+
+    <table class="table table-condensed table-responsive sidebar-shadow">
+        @if (!Model.Any())
+        {
+            <tr>
+                <td class="alert alert-info">
+                    <strong>No Transactions Found</strong>
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <th>Actions</th>
+                <th>Agents</th>
+                <th>Property</th>
+                <th>Customer Name</th>
+                <th>Envelope</th>
+            </tr>
+            foreach (var searchViewModel in Model)
+            {
+                <tr>
+                    <td>
+                        @using (Html.BeginForm("QualityAssuranceEditByTransactionId", "Transaction",
+                    new { transactionId = searchViewModel.Transaction.TransactionId }, FormMethod.Post))
+                        {
+                            <button type="submit" class="btn btn-xs btn-link unpadded-buton">Quality Assurance</button>
+                        }
+                    </td>
+
+                    <td>
+                        @{
+                        var agentValidationClasses = "";
+                        var agentValidationTitle = "";
+                        if (!searchViewModel.Transaction.TransactionToRelates.Any(t => t.Active == "A" && t.SortOrder == 1))
+                        {
+                            agentValidationClasses = "shadow-on-text red-text pg-tooltip";
+                            agentValidationTitle = "No agents assigned to the customer";
+                        }
+
+                        foreach (var agent in searchViewModel.AgentViewModels)
+                        {
+                            <div title="@agentValidationTitle" class="@agentValidationClasses">
+                                @agent.RelateToName.LastName, &nbsp;@agent.RelateToName.FirstName
+                            </div>
+                        }
+                        }
+                    </td>
+                    <td>
+                        @{
+                        var validationClasses = "";
+                        var validationTitle = "";
+                        if (searchViewModel.Property.PropertyId == 440000000)
+                        {
+                            validationClasses = "shadow-on-text red-text pg-tooltip";
+                            validationTitle = "Address failed validation with the USPS";
+                        }
+                        <div title="@validationTitle" class="@validationClasses">
+                            @searchViewModel.PropertyAlternate.AltAddress1
+                            @searchViewModel.PropertyAlternate.AltAddress2
+                            <br />
+                            @searchViewModel.PropertyAlternate.AltCity
+                            @searchViewModel.PropertyAlternate.AltState
+                            @searchViewModel.PropertyAlternate.AltZip
+                        </div>
+                        }
+                    </td>
+                    <td>
+                        @if (searchViewModel.Transaction.PresentationDetail == null)
+                        {
+                            <div title="Missing customer information" class="shadow-on-text red-text pg-tooltip">Missing</div>
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(searchViewModel.Transaction.PresentationDetail.CustomerName))
+                            {
+                                <div title="Missing customer information" class="shadow-on-text red-text pg-tooltip">Missing</div>
+                            }
+                            else
+                            {
+                                @searchViewModel.Transaction.PresentationDetail.CustomerName
+                            }
+                        }
+                    </td>
+                    <td>
+                        @if (searchViewModel.Transaction.PresentationDetail == null)
+                        {
+                            <div title="Missing envelope information" class="shadow-on-text red-text pg-tooltip">Missing</div>
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(searchViewModel.Transaction.PresentationDetail.LeaveBehindLetterName))
+                            {
+                                <div title="Missing envelope information" class="shadow-on-text red-text pg-tooltip">Missing</div>
+                            }
+                            else
+                            {
+                                @searchViewModel.Transaction.PresentationDetail.LeaveBehindLetterName
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+
+
+    @if (Model.Any())
+    {
+        <table>
+            <tr>
+                <td>
+                    @if (ViewBag.HasPreviousPage)
+                    {
+                        @Html.ActionLink("First", "SearchBy", new { search = ViewBag.Search, searchType = ViewBag.SearchType, page = 1 }, new { @class = "btn btn-xs btn-primary" })
+                        @Html.Raw("&nbsp;")
+                        ;
+                        @Html.ActionLink("Previous", "SearchBy", new { search = ViewBag.Search, searchType = ViewBag.SearchType, page = ViewBag.PageNumber - 1 }, new { @class = "btn btn-xs btn-primary" })
+                    }
+                </td>
+                <td>
+                    @if (ViewBag.HasNextPage)
+                    {
+                        @Html.ActionLink("Next", "SearchBy", new { search = ViewBag.Search, searchType = ViewBag.SearchType, page = ViewBag.PageNumber + 1 }, new { @class = "btn btn-xs btn-primary" })
+                        @Html.Raw("&nbsp;")
+                        ;
+                        @Html.ActionLink("Last", "SearchBy", new { search = ViewBag.Search, searchType = ViewBag.SearchType, page = ViewBag.PageCount }, new { @class = "btn btn-xs btn-primary" })
+                    }
+                </td>
+                <td>
+                    &nbsp;&nbsp;
+                </td>
+                <td class="blue-text shadow-on-text">
+                    Page @(ViewBag.PageCount < ViewBag.PageNumber ? 0 : ViewBag.PageNumber)
+                    of @ViewBag.PageCount
+                </td>
+                <td>
+                    &nbsp;&nbsp;
+                </td>
+                <td class="blue-text shadow-on-text">
+                    Total @ViewBag.Total
+                </td>
+            </tr>
+        </table>
+    }
+</article>
+@section scripts
+{
+    <script src="~/Scripts/custom/search.js"></script>
+}
+@section styles
+{
+    <link href="~/Content/custom/search.css" rel="stylesheet" />
+}
+

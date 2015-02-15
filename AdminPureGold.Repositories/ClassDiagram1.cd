@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AdminPureGold.Repositories.Repositories.Mrc.TransactionRepository">
+    <Position X="4.75" Y="2.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAIAAEAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Repositories\Mrc\TransactionRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AdminPureGold.Repositories.Repositories.GenericRepository&lt;T&gt;">
+    <Position X="1.25" Y="2.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAgAAAABAAAAAAAAAAAEIAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>Repositories\GenericRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="AdminPureGold.Repositories.Interfaces.Mrc.ITransactionRepository">
+    <Position X="4.75" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAAEAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Interfaces\Mrc\ITransactionRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AdminPureGold.Repositories.Interfaces.IGenericRepository&lt;T&gt;">
+    <Position X="1.25" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAABAAAAAAAAAAAEAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>Interfaces\IGenericRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

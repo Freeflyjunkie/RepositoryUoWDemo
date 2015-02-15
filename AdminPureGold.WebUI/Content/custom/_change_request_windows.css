@@ -1,0 +1,11 @@
+﻿.modal-body {
+    padding-top: 0px;
+}
+
+.comment-textarea {
+    -moz-resize: none; 
+    -ms-resize: none; 
+    -o-resize: none; 
+    resize: none; 
+    text-align: left
+}

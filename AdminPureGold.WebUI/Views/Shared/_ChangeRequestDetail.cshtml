@@ -1,0 +1,56 @@
+﻿@using AdminPureGold.ApplicationServices.DTO
+@model AdminPureGold.WebUI.ViewModels.Common.ChangeRequestDetailViewModel
+
+@if (Model.ChangeRequest.Detail != "")
+{    
+    if (Model.ChangeRequestDetailParsed== null)
+    {
+        <div><strong>Parsed Request Details Not Found</strong></div>
+    }
+    else
+    {
+        if (Model.ChangeRequest.ChangeRequestCategoryId == 400)
+        {
+            var addressParsedDetail = Model.ChangeRequestDetailParsed as ChangeRequestDetailAddressParsed;
+            if (addressParsedDetail != null)
+            {
+                @Html.Partial("_ChangeRequestDetailAddress", addressParsedDetail)
+            }
+        }
+        if (Model.ChangeRequest.ChangeRequestCategoryId == 401)
+        {
+            var agentParsedDetail = Model.ChangeRequestDetailParsed as ChangeRequestDetailAgentParsed;
+            if (agentParsedDetail != null)
+            {
+                @Html.Partial("_ChangeRequestDetailAgent", agentParsedDetail)
+            }
+        }
+
+        if (Model.ChangeRequest.ChangeRequestCategoryId == 402)
+        {
+            var nameParsedDetail = Model.ChangeRequestDetailParsed as ChangeRequestDetailNameParsed;
+            if (nameParsedDetail != null)
+            {
+                @Html.Partial("_ChangeRequestDetailCustomerName", nameParsedDetail)
+            }
+        }
+
+        if (Model.ChangeRequest.ChangeRequestCategoryId == 403)
+        {
+            @Html.Partial("_ChangeRequestDetailRemove")
+        }
+
+        if (Model.ChangeRequest.ChangeRequestCategoryId == 404)
+        {
+            @Html.Partial("_ChangeRequestDetailOther", Model.ChangeRequest)
+        }
+    }
+}
+else
+{
+    <table class="table table-condensed table-responsive table-no-margin">
+        <tr>
+            <td><strong>No Request Details Found</strong></td>
+        </tr>
+    </table>
+}

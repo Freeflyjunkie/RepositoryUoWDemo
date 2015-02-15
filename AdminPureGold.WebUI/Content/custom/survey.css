@@ -1,0 +1,29 @@
+﻿body {
+}
+
+.Background-highlight {
+    background-color: #a8d3ff;    
+    /*background-color: rgba(168, 211, 255, 0.39);*/
+    border: solid 1px #83bcf7;
+}
+
+.link-class {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
+.refnum
+{
+    -webkit-text-shadow: 5px 5px 5px #c0c0c0;
+    -ms-text-shadow: 5px 5px 5px #c0c0c0;
+    text-shadow: 5px 5px 5px #c0c0c0;
+    color: #008cba;
+    margin-top: 0px;
+    font-size:12pt;
+}
+
+.text-width
+{
+    width: 500px;
+}

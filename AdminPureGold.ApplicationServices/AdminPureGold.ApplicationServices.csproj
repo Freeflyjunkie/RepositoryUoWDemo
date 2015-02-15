@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F2F0E5BA-73C6-4A84-8D8D-07B3C1A41936}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AdminPureGold.ApplicationServices</RootNamespace>
+    <AssemblyName>AdminPureGold.ApplicationServices</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DocaLabs.Http.Client">
+      <HintPath>..\packages\DocaLabs.Http.Client.3.0.0.0\lib\DocaLabs.Http.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="DocaLabs.Http.Client.Extension.NewtonSoft">
+      <HintPath>..\packages\DocaLabs.Http.Client.with.NewtonSoft.Json.Serializer.3.0.0.0\lib\DocaLabs.Http.Client.Extension.NewtonSoft.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceManager">
+      <HintPath>..\..\..\WeichertOne\Main\Bin\ServiceManager.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\AgentManager.cs" />
+    <Compile Include="Classes\ChangeRequestDetailParser.cs" />
+    <Compile Include="Classes\CreateTransaction.cs" />
+    <Compile Include="Classes\ServiceToolbox.cs" />
+    <Compile Include="DTO\Bing\BLAddress.cs" />
+    <Compile Include="DTO\Bing\BLBoundingBox.cs" />
+    <Compile Include="DTO\Bing\BLGeocodePoint.cs" />
+    <Compile Include="DTO\Bing\BLLocation.cs" />
+    <Compile Include="DTO\Bing\BLPoint.cs" />
+    <Compile Include="DTO\Bing\BLResourceSet.cs" />
+    <Compile Include="DTO\Bing\BLResponse.cs" />
+    <Compile Include="DTO\Bing\Location.cs" />
+    <Compile Include="DTO\ChangeRequestDetailAddressParsed.cs" />
+    <Compile Include="DTO\ChangeRequestDetailAgentParsed.cs" />
+    <Compile Include="DTO\ChangeRequestDetailNameParsed.cs" />
+    <Compile Include="DTO\ChangeRequestDetailOtherParsed.cs" />
+    <Compile Include="DTO\ChangeRequestDetailParsed.cs" />
+    <Compile Include="DTO\ChangeRequestDetailRemovalParsed.cs" />
+    <Compile Include="DTO\Mailing.cs" />
+    <Compile Include="DTO\PrintJobWithCount.cs" />
+    <Compile Include="DTO\SurveyReport.cs" />
+    <Compile Include="DTO\UspsValidatedProperty.cs" />
+    <Compile Include="DTO\ViewBaseAssociateActive.cs" />
+    <Compile Include="DTO\ViewBaseEmployeeActive.cs" />
+    <Compile Include="Enums\PrintJobItemStatusEnum.cs" />
+    <Compile Include="Enums\PrintJobStatusEnum.cs" />
+    <Compile Include="Enums\PrintJobTypeEnum.cs" />
+    <Compile Include="Enums\QualityAssuranceType.cs" />
+    <Compile Include="Interfaces\IAtlasXService.cs" />
+    <Compile Include="Interfaces\IChangeRequestService.cs" />
+    <Compile Include="Interfaces\ICorpCommService.cs" />
+    <Compile Include="Interfaces\IEmailService.cs" />
+    <Compile Include="Interfaces\IPrintJobService.cs" />
+    <Compile Include="Interfaces\IQualityAssuranceService.cs" />
+    <Compile Include="Interfaces\ISurveyService.cs" />
+    <Compile Include="Interfaces\IToolboxService.cs" />
+    <Compile Include="Interfaces\ITransactionService.cs" />
+    <Compile Include="Interfaces\IVirtualEarthService.cs" />
+    <Compile Include="Interfaces\IWeichertCoreService.cs" />
+    <Compile Include="Interfaces\IWeichertSLService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AtlasXService.cs" />
+    <Compile Include="Services\ChangeRequestService.cs" />
+    <Compile Include="Services\CorpCommService.cs" />
+    <Compile Include="Services\EmailService.cs" />
+    <Compile Include="Services\PrintJobService.cs" />
+    <Compile Include="Services\QualityAssuranceService.cs" />
+    <Compile Include="Services\SurveyService.cs" />
+    <Compile Include="Services\ToolboxService.cs" />
+    <Compile Include="Services\TransactionService.cs" />
+    <Compile Include="Services\VirtualEarthService.cs" />
+    <Compile Include="Services\WeichertCoreService.cs" />
+    <Compile Include="Services\WeichertSLService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AdminPureGold.Domain\AdminPureGold.Domain.csproj">
+      <Project>{b72489ab-1051-4358-a0d8-bff7880b9e9d}</Project>
+      <Name>AdminPureGold.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AdminPureGold.Repositories\AdminPureGold.Repositories.csproj">
+      <Project>{d3c1e616-8351-418b-a2ed-c1c9bd877df6}</Project>
+      <Name>AdminPureGold.Repositories</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

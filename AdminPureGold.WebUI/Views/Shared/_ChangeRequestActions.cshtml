@@ -1,0 +1,53 @@
+﻿@model AdminPureGold.WebUI.ViewModels.Common.ChangeRequestActionViewModel
+
+@if (Model.ControllerName != "Transaction")
+{
+    using (Html.BeginForm("QualityAssuranceEdit", "Transaction",
+         new { changeRequestId = Model.ChangeRequest.ChangeRequestId }, FormMethod.Post))
+    {
+        <button type="submit" class="btn btn-xs btn-link unpadded-buton">Quality Assurance</button>
+    }
+}
+<button type="button" data-changerequest-id="@Model.ChangeRequest.ChangeRequestId"
+        class="btn btn-xs btn-link unpadded-buton open-comment-window-button">
+    Comments
+</button>
+@*IF STATUS IS CLOSED OR DENIED*@
+@if (Model.ChangeRequest.ChangeRequestStatusId == 601 || Model.ChangeRequest.ChangeRequestStatusId == 602)
+{
+    //NO QUICK ACTIONS
+    using (Html.BeginForm("ReOpenChangeRequest", Model.ControllerName, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <input id="changeRequestId" name="changeRequestId" type="hidden" value="@Model.ChangeRequest.ChangeRequestId" />
+        <button type="submit" class="btn btn-xs btn-link unpadded-buton">Re-Open</button>
+    }
+}
+else
+{
+    @*IF CATEGORY IS OTHER*@
+    if (Model.ChangeRequest.ChangeRequestCategoryId == 404)
+    {
+        <br />
+        <button type="button" data-changerequest-id="@Model.ChangeRequest.ChangeRequestId"
+                class="btn btn-xs btn-link unpadded-buton open-close-window-button">Close</button>
+    }
+    @*IF CATEGORY IS ADDRESS, AGENT, NAME OR REMOVAL*@
+    @*SUPPLY QUICK ACTION ACCEPT / DENY*@
+    else
+    {
+        using (Html.BeginForm("AcceptChangeRequest", Model.ControllerName,
+            new
+            {
+                changeRequestId = Model.ChangeRequest.ChangeRequestId,
+                changeRequestCategory = Model.ChangeRequest.ChangeRequestCategoryId
+            }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-xs btn-link unpadded-buton">Accept</button>
+        }
+        <button type="button" data-changerequest-id="@Model.ChangeRequest.ChangeRequestId"
+                class="btn btn-xs btn-link unpadded-buton open-deny-window-button">Deny</button>
+    }
+}
+@Html.Partial("_ChangeRequestWindows", Model.ControllerName)

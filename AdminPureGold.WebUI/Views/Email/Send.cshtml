@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Send";
+}
+@section header
+{
+    <table>
+        <tr>
+            <td>
+                <img src="~/Images/sendingEmails.gif" />
+            </td>
+            <td>
+                <h2>Sending Email Reminders</h2>
+            </td>
+        </tr>
+    </table>
+}
+<section class="col-lg-12 col-md-12">
+    <table id="sendingEmailsTable" class="table table-responsive">
+        <tr>
+            <th>
+                Agent Name
+            </th>
+            <th>
+                Agent Office
+            </th>
+            <th>
+                Agent Email
+            </th>
+            <th>
+                Sending Status
+            </th>
+        </tr>
+    </table>
+</section>
+@section scripts
+{
+    <script src="~/Scripts/custom/email_send.js"></script>
+}
+
+@section styles
+{
+    <link href="~/Content/custom/email_send.css" rel="stylesheet" />
+}

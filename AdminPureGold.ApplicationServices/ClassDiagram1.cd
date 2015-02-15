@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AdminPureGold.ApplicationServices.Services.TransactionService">
+    <Position X="4.5" Y="1.25" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Struct Name="AdminPureGold.ApplicationServices.Services.TransactionService.QualityAssuranceIssue">
+        <TypeIdentifier>
+          <NewMemberFileName>Services\TransactionService.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAIAAAAAAAAAABACEAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\TransactionService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="AdminPureGold.ApplicationServices.Interfaces.IQualityAssurance">
+    <Position X="1.5" Y="2.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAACEAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IQualityAssurance.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AdminPureGold.ApplicationServices.Interfaces.ITransactionService">
+    <Position X="1.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\ITransactionService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="AdminPureGold.ApplicationServices.Enums.QualityAssuranceType">
+    <Position X="7.25" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAACAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enums\QualityAssuranceType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

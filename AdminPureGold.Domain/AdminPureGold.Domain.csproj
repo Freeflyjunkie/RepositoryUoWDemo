@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B72489AB-1051-4358-A0D8-BFF7880B9E9D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AdminPureGold.Domain</RootNamespace>
+    <AssemblyName>AdminPureGold.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Interfaces\IModelWithState.cs" />
+    <Compile Include="Models\AtlasX\Property.cs" />
+    <Compile Include="Models\AtlasX\PropertyAlternate.cs" />
+    <Compile Include="Models\AtlasX\WApplication.cs" />
+    <Compile Include="Models\AtlasX\WAtlasX.cs" />
+    <Compile Include="Models\AtlasX\WAtlasXToApp.cs" />
+    <Compile Include="Models\AtlasX\WAtlasXtoAppRole.cs" />
+    <Compile Include="Models\AtlasX\WAtlasXtoAppWPerson.cs" />
+    <Compile Include="Models\CorpComm\McMessage.cs" />
+    <Compile Include="Models\Mrc\AppObject.cs" />
+    <Compile Include="Models\Mrc\AppObjectToAttribute.cs" />
+    <Compile Include="Models\Mrc\AppObjectToTransaction.cs" />
+    <Compile Include="Models\Mrc\ChangeRequest.cs" />
+    <Compile Include="Models\Mrc\ChangeRequestCategory.cs" />
+    <Compile Include="Models\Mrc\ChangeRequestComment.cs" />
+    <Compile Include="Models\Mrc\ChangeRequestStatus.cs" />
+    <Compile Include="Models\Mrc\LastImportDate.cs" />
+    <Compile Include="Models\Mrc\PresentationDetail.cs" />
+    <Compile Include="Models\Mrc\PrintExport.cs" />
+    <Compile Include="Models\Mrc\PrintExportNewsletter.cs" />
+    <Compile Include="Models\Mrc\PrintJob.cs" />
+    <Compile Include="Models\Mrc\PrintJobItemStatus.cs" />
+    <Compile Include="Models\Mrc\PrintJobStatus.cs" />
+    <Compile Include="Models\Mrc\PrintJobToAppObjectToTransaction.cs" />
+    <Compile Include="Models\Mrc\PrintJobToWeichertSL.cs" />
+    <Compile Include="Models\Mrc\PrintJobType.cs" />
+    <Compile Include="Models\Mrc\PureGoldEmail.cs" />
+    <Compile Include="Models\Mrc\PureGoldEmailSetting.cs" />
+    <Compile Include="Models\Mrc\PureGoldMailing.cs" />
+    <Compile Include="Models\Mrc\Survey.cs" />
+    <Compile Include="Models\Mrc\SurveyAnswer.cs" />
+    <Compile Include="Models\Mrc\SurveyAnswerText.cs" />
+    <Compile Include="Models\Mrc\SurveyChoice.cs" />
+    <Compile Include="Models\Mrc\SurveyChoiceType.cs" />
+    <Compile Include="Models\Mrc\SurveyQuestion.cs" />
+    <Compile Include="Models\Mrc\SurveyUserSetting.cs" />
+    <Compile Include="Models\Mrc\Transaction.cs" />
+    <Compile Include="Models\Mrc\TransactionTemplate.cs" />
+    <Compile Include="Models\Mrc\TransactionToContact.cs" />
+    <Compile Include="Models\Mrc\TransactionToRelate.cs" />
+    <Compile Include="Models\Mrc\UserProfile.cs" />
+    <Compile Include="Models\Mrc\UserRequestLog.cs" />
+    <Compile Include="Models\WeichertCore\Office.cs" />
+    <Compile Include="Models\WeichertCore\Person.cs" />
+    <Compile Include="Models\WeichertCore\PersonToImage.cs" />
+    <Compile Include="Models\WeichertCore\PersonToRelate.cs" />
+    <Compile Include="Models\WeichertCore\RelateToAddress.cs" />
+    <Compile Include="Models\WeichertCore\RelateToEmail.cs" />
+    <Compile Include="Models\WeichertCore\RelateToName.cs" />
+    <Compile Include="Models\WeichertCore\RelateToPhone.cs" />
+    <Compile Include="Models\WeichertCore\WeichertOneUser.cs" />
+    <Compile Include="Models\WeichertSL\BuyerGreeting.cs" />
+    <Compile Include="Models\WeichertSL\Closing.cs" />
+    <Compile Include="Models\WeichertSL\List.cs" />
+    <Compile Include="Models\WeichertSL\ListProperty.cs" />
+    <Compile Include="Models\WeichertSL\ListToAssociate.cs" />
+    <Compile Include="Models\WeichertSL\ListToSeller.cs" />
+    <Compile Include="Models\WeichertSL\ListType.cs" />
+    <Compile Include="Models\WeichertSL\PureGoldSale.cs" />
+    <Compile Include="Models\WeichertSL\Sale.cs" />
+    <Compile Include="Models\WeichertSL\SaleToAssociate.cs" />
+    <Compile Include="Models\WeichertSL\SaleToBroker.cs" />
+    <Compile Include="Models\WeichertSL\SaleToBuyer.cs" />
+    <Compile Include="Models\WeichertSL\SaleType.cs" />
+    <Compile Include="Models\WeichertSL\SourceCd.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

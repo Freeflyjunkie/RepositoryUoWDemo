@@ -1,0 +1,31 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+<section class="col-lg-6 col-md-6">
+    <img src="~/Images/puppy_finger.gif" class="img-responsive img-thumbnail" />
+</section>
+<section class="col-lg-6 col-md-6" style="font-size: 9pt">
+    <h4><strong>Enjoy this while the application errors out.</strong></h4>
+    <em>An internal error occured while trying to process your request.</em>
+    <br />
+    An error occurred while processing your request.
+    <br />
+    <strong><em>Controller</em></strong>:&nbsp;@Model.ControllerName
+    <br />
+    <strong><em>Actions</em></strong>:&nbsp;@Model.ActionName
+    <br />
+    <strong><em>Exception</em></strong>:&nbsp;@Model.Exception.Message
+    <br />
+    <strong><em>Inner</em></strong>:&nbsp;@Model.Exception.InnerException.Message
+    <br />
+    <strong><em>Data</em></strong>:&nbsp;@Model.Exception.Data
+    <br />
+    <br />
+    We apologize for this inconvience. If this continues please contact Helpdesk...
+    <br />
+    <strong><em>Phone:</em></strong> 973.290.5722
+    <br />
+    <strong><em>Email:</em></strong> helpdesk@weichertrealtors.net
+</section>

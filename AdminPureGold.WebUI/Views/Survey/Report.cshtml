@@ -1,0 +1,132 @@
+﻿@model AdminPureGold.WebUI.ViewModels.SurveyViewModel
+@{
+    ViewBag.Title = "Survey Reporting";
+}
+@section header{
+    <h2>Survey Reporting</h2>
+}
+
+    @using (Html.BeginForm("Report", "Survey", FormMethod.Post))
+    {
+
+        @Html.AntiForgeryToken()
+        <div id="includeDatePicker">
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <input class="datepicker" id="startDate" name="startDate" value="@ViewBag.startDate" />
+                            <span class="add-on">to</span>
+                            <input class="datepicker" id="endDate" name="endDate" value="@ViewBag.endDate" />
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-xs btn-primary">Run Report</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    }
+
+    @if (Model != null)
+    {
+        <br />
+        <div class="row">
+            <div class="col-lg-3 align-top">
+                <h3>Total Surveys - @Model.Surveys.Select(surveys => surveys.SurveyId).Distinct().Count()</h3>
+            </div>
+            <div class="col-lg-9 align-bottom">
+                <h4>Entered Between @ViewBag.startDate and @ViewBag.endDate</h4>
+            </div>
+        </div>
+        
+        
+    }
+
+    <table class="table table-condensed table-responsive sidebar-shadow">
+        @if (Model == null)
+        {
+            <tr>
+                <td class="alert alert-info">
+                    <strong>No Questions Found</strong>
+                </td>
+            </tr>
+        }
+        else
+        {
+            foreach (var surveyQuestion in Model.SurveyQuestions)  // Loop through Questions
+            {
+
+                var questionId = surveyQuestion.QuestionId;
+
+
+                IEnumerable<int> choiceIds = Model.SurveyChoices.Where(choices => choices.QuestionId == questionId).Select(a => a.ChoiceId);
+                var surveysWithChoices = Model.SurveyAnswers.Where(c => choiceIds.Contains(c.ChoiceId));
+
+                var howManyPeopleAnsweredThisQuestion = surveysWithChoices.Select(surveys => surveys.SurveyId).Distinct().Count();
+
+                <tr>
+                    <td>
+                        <h4>@surveyQuestion.QuestionText</h4>
+                        @howManyPeopleAnsweredThisQuestion Surveys answered this question
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-left:80px;">
+                        <table>
+                            @foreach (var surveyChoice in Model.SurveyChoices) // Loop Through All Choices
+                            {
+                                if (surveyChoice.QuestionId == surveyQuestion.QuestionId) // If the Choice has the same QuestionID
+                                {
+                                    var howManyChoseThis = Model.SurveyAnswers.Count(s => s.ChoiceId == surveyChoice.ChoiceId);
+
+                                    decimal hm;
+                                    decimal ha;
+
+                                    decimal.TryParse(howManyChoseThis.ToString(), out hm);
+                                    decimal.TryParse(howManyPeopleAnsweredThisQuestion.ToString(), out ha);
+
+                                    decimal percentageOfTotal = 0;
+                                    if (ha > 0)
+                                    {
+                                        percentageOfTotal = (hm / ha);
+                                    }
+
+
+
+                                    <tr class="row" data-hover="highlight">
+                                        <td width="250px" valign="top" class="link" data-hover="link" data-choiceid="@surveyChoice.ChoiceId">
+                                            @surveyChoice.ChoiceText
+                                        </td>
+                                        <td width="50px" valign="top" align="right">
+                                            @Model.SurveyAnswers.Count(s => s.ChoiceId == surveyChoice.ChoiceId)
+                                        </td>
+                                        <td width="50px" valign="top" align="right">
+                                            @String.Format("{0:P0}", percentageOfTotal)
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+
+
+
+@section scripts
+{
+    <script src="~/Scripts/custom/printjob_config.js"></script>
+    <script src="~/Scripts/bootstrap/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/custom/survey.js"></script>
+    <script src="~/Scripts/jquery/validate/jquery.unobtrusive-ajax.min.js"></script>
+}
+@section styles
+{
+    <link href="~/Content/custom/printjob_config.css" rel="stylesheet" />
+    <link href="~/Content/custom/survey.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap/css/bootstrap-datepicker.css" rel="stylesheet" />
+}

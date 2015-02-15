@@ -1,0 +1,95 @@
+﻿@model string
+
+<div class="modal fade" id="denyAndCommentWindow" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h3>Add a New Comment Before You Deny</h3>
+            </div>
+            @using (Html.BeginForm("DenyChangeRequestWithComments", Model, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <h4 id="previousCommentsTitle">Previous Comments</h4>
+                    <div id="previousComments"></div>
+                    <input id="changeRequestId" name="changeRequestId" type="hidden"
+                           value="" />
+                    <textarea id="comments"
+                              name="comments"
+                              class="comment-textarea"
+                              rows="5"
+                              cols="60"
+                              wrap="hard"
+                              placeholder="enter new comments ..."></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button id="saveComment" type="submit" class="btn btn-sm btn-primary">Add Comment And Deny</button>
+                    <button id="closeWindow" class="btn btn-sm btn-primary" data-dismiss="modal">Cancel</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="closeAndCommentWindow" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h3>Add a New Comment Before You Close</h3>
+            </div>
+            @using (Html.BeginForm("CloseChangeRequestWithComments", Model, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <h4 id="previousCommentsTitle">Previous Comments</h4>
+                    <div id="previousComments"></div>
+                    <input id="changeRequestId" name="changeRequestId" type="hidden"
+                           value="" />
+                    <textarea id="comments"
+                              name="comments"
+                              class="comment-textarea"
+                              rows="5"
+                              cols="60"
+                              wrap="hard"
+                              placeholder="enter new comments ..."></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button id="saveComment" type="submit" class="btn btn-sm btn-primary">Add Comment And Close</button>
+                    <button id="closeWindow" class="btn btn-sm btn-primary" data-dismiss="modal">Cancel</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="commentWindow" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h3>Add a New Comment</h3>
+            </div>
+            @using (Html.BeginForm("SaveChangeRequestComment", Model, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <h4 id="previousCommentsTitle">Previous Comments</h4>
+                    <div id="previousComments"></div>
+                    <input id="changeRequestId" name="changeRequestId" type="hidden"
+                           value="" />
+                    <textarea id="comments"
+                              name="comments"
+                              class="comment-textarea"
+                              rows="5"
+                              cols="60"
+                              wrap="hard"
+                              placeholder="enter comments ..."></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button id="saveComment" type="submit" class="btn btn-sm btn-primary">Add Comment</button>
+                    <button id="closeWindow" class="btn btn-sm btn-primary" data-dismiss="modal">Cancel</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

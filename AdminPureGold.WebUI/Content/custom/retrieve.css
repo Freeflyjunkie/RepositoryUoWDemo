@@ -1,0 +1,22 @@
+﻿#agentSelection {
+    width: 380px;
+}
+
+#agentDropDown {
+    max-height: 200px;
+    width: 380px;
+    overflow: auto;
+}
+
+#reassignToAgentSelection {
+    width: 380px;
+}
+
+#reassignToAgentDropDown {
+    max-height: 200px;
+    width: 380px;
+    overflow: auto;
+}
+
+.reassignBtn {}
+.bulk-reassign-checkbox {}

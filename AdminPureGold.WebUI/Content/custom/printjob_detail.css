@@ -1,0 +1,31 @@
+﻿#filterBySelection {
+    height: 28px;
+    width: 150px;
+    padding: 5px 5px 5px 5px;
+    border: 1px solid #c0c0c0;
+}
+
+#filterByDropDown {
+    width: 70px;
+    border: 1px solid #c0c0c0;
+}
+
+.cat-status-filter-table {
+    width: 700px;    
+}
+
+.search-filter-table {
+    width: 320px;    
+}
+
+input, .form-control {
+    padding: 3px;
+}
+
+#search {
+    width: 230px;
+}
+
+.excluded-mailing {
+    background-color: #d3d3d3;
+}

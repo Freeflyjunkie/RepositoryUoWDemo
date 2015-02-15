@@ -1,0 +1,187 @@
+﻿@using AdminPureGold.ApplicationServices.Enums
+@using AdminPureGold.WebUI.ViewModels.Common
+@model AdminPureGold.WebUI.ViewModels.HomeViewModel
+@{
+    ViewBag.Title = "Pure Gold Dashboard";
+}
+<article class="col-lg-8 col-md-8">
+    <h2>Open Change Requests</h2>
+    <table class="table table-condensed table-responsive sidebar-shadow">
+        <tr>
+            <th>Actions</th>
+            <th>Category</th>
+            <th>Details</th>
+        </tr>
+        @if (!Model.ChangeRequests.Any())
+        {
+            <tr>
+                <td colspan="5" class="alert alert-info">
+                    As Solicitudes De Cambio No Abiertas
+                </td>
+            </tr>
+        }
+        else
+        {
+            foreach (var changeRequest in Model.ChangeRequests)
+            {
+                <tr>
+                    <td style="padding-right: 20px">
+                        @Html.Partial("_ChangeRequestActions", new ChangeRequestActionViewModel { ChangeRequest = changeRequest, ControllerName = "Home" })
+                    </td>
+                    <td style="width: 80px; vertical-align: middle">
+                        @Html.Partial("_ChangeRequestCategory", changeRequest.ChangeRequestCategory)
+                    </td>
+                    <td>
+                        @Html.Partial("_ChangeRequestDetail", new ChangeRequestDetailViewModel
+                            {
+                                ChangeRequest = changeRequest,
+                                ChangeRequestDetailParsed = Model.ChangeRequestDetailParsed.SingleOrDefault(parsed => parsed.ChangeRequestId == changeRequest.ChangeRequestId)
+                            })
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</article>
+<article class="col-lg-4 col-md-4">
+    <div>
+        <h2>Quality Assurance</h2>
+        <table class="table table-condensed table-responsive sidebar-shadow" id="qaIssues">
+            @{
+                foreach (var item in Model.QualityAssuranceIssues)
+                {
+                    if (item.Type == QualityAssuranceType.PrintJob && Model.CurrentPrintJob == null)
+                    {
+                        continue;
+                    }
+                    var linkText = @String.Format("{0} {1}", item.Count, item.Description);
+                    var linkClasses = "btn btn-xs btn-link unpadded-buton";
+                    <tr>
+                        <td class="action-button-column-width-45">
+                            @if (item.Count == 0)
+                            {
+                                linkClasses = linkClasses + " green-text";
+                                <img src="~/Images/Common/green_check.png" title="No quality assurance issues" class="pg-tooltip" height="20" />
+                            }
+                            else
+                            {
+                                linkClasses = linkClasses + " red-text";
+                                <img src="~/Images/Common/alert.png" title="Try fixing some of these!!!!" class="pg-tooltip" height="20" />
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink(linkText, "QualityAssuranceIndexByType", "Transaction", new { type = (int)item.Type, page = 1 }, new { @class = linkClasses })
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>        
+    <div>
+        <h2>Print Jobs</h2>
+        @{
+            var currentPrintJobClasses = "";
+            if (Model.CurrentPrintJob != null)
+            {
+                currentPrintJobClasses = "alert alert-info";
+            }
+            <table class="table table-condensed table-responsive sidebar-shadow">
+                <tr class="@currentPrintJobClasses">
+                    <td class="action-button-column-width-45">
+                        <img src="~/Images/bullet.png" />
+                    </td>
+                    <td>
+                        @if (Model.CurrentPrintJob != null)
+                        {
+                            @Html.ActionLink("Current Print Job", "Detail", "PrintJob",
+                                new { printJobId = Model.CurrentPrintJob.PrintJobId }, new { @class = "btn btn-xs btn-link unpadded-buton" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Configure New Print Job", "Configure", "PrintJob", new { @class = "btn btn-xs btn-link unpadded-buton" }, null)
+                        }
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="~/Images/bullet.png" />
+                    </td>
+                    <td>
+                        @Html.ActionLink("Print Job History", "History", "PrintJob", null, new { @class = "btn btn-xs btn-link unpadded-buton" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="~/Images/bullet.png" />
+                    </td>
+                    <td>
+                        @Html.ActionLink("Send Email Reminders", "History", "PrintJob", null, new { @class = "btn btn-xs btn-link unpadded-buton" })
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+    <div>
+        <h2>Surveys</h2>
+        <table class="table table-condensed table-responsive sidebar-shadow">
+            <tr>
+                <td class="action-button-column-width-45">
+                    <img src="~/Images/bullet.png" />
+                </td>
+                <td>
+                    @Html.ActionLink("Enter", "Search", "Survey", null, new { @class = "btn btn-xs btn-link unpadded-buton" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="~/Images/bullet.png" />
+                </td>
+                <td>
+                    @Html.ActionLink("Totals", "Report", "Survey", null, new { @class = "btn btn-xs btn-link unpadded-buton" })
+                </td>
+            </tr>           
+        </table>
+    </div>
+    <div>
+        <h2>Customers</h2>
+        <table class="table table-condensed table-responsive sidebar-shadow">
+            <tr>
+                <td class="action-button-column-width-45">
+                    <img src="~/Images/bullet.png" />
+                </td>
+                <td>
+                    @Html.ActionLink("Add a New Customer", "CreateCustomer", "Transaction", null, new { @class = "btn btn-xs btn-link unpadded-buton" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="~/Images/bullet.png" />
+                </td>
+                <td>
+                    @Html.ActionLink("Reassignments", "Retrieve", "Reassignment", null, new { @class = "btn btn-xs btn-link unpadded-buton" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="~/Images/bullet.png" />
+                </td>
+                <td>
+                    @Html.ActionLink("Renewals History", "Index", "Renewal", null, new { @class = "btn btn-xs btn-link unpadded-buton" })
+                </td>
+            </tr>
+        </table>
+    </div>
+</article>
+@section scripts
+{
+    <script src="~/Scripts/custom/home_index.js"></script>
+    <script src="~/Scripts/custom/_change_request_category.js"></script>
+    <script src="~/Scripts/custom/_change_request_windows.js"></script>
+}
+@section styles
+{
+    <link href="~/Content/custom/home_index.css" rel="stylesheet" />
+    <link href="~/Content/custom/_change_request_windows.css" rel="stylesheet" />
+}
+

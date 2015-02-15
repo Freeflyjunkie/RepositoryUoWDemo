@@ -1,0 +1,300 @@
+﻿@{
+    ViewBag.Title = "Configure";
+}
+@section header{
+    <h2>Configure a Print Job</h2>
+}
+<section class="col-lg-5 col-md-5 col-sm-12" data-display-location="leftSide">
+    <h3>
+        Choose a Mailing
+    </h3>
+    <select name="templates" id="templates" class="input-sm">
+        <option value="" disabled selected>choose a template</option>
+        @foreach (var type in ViewBag.PrintJobTypes)
+        {
+            <option value="@type.PrintJobTypeId">@type.PrintJobTypeDesc</option>
+        }        
+    </select>
+    <div id="chooseWhatToInclude" class="padding-top-20">
+        <div id="includeThankYouCards">
+            <h3>
+                Scheduled Thank You Cards
+            </h3>
+            <table class="table sidebar-shadow printjob-box-padding">
+                <tr>
+                    <td>
+                        Print Job will automatically include all the customers that need to have Thank You Cards printed.
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="includeDatePicker">
+            <h3>
+                Search Scheduled Date by Range
+            </h3>
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <input class="datepicker" id="startDate" />
+                            <span class="add-on">to</span>
+                            <input class="datepicker" id="endDate" />
+                        </td>
+                        <td></td>
+                        <td>
+                            <span id="dateError" class="red-text shadow-on-text">invalid date range</span>
+                        </td>                      
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="includePrintJob">
+        <div class="padding-top-20">
+            <h3>
+                Print Job
+            </h3>
+            <table class="table sidebar-shadow printjob-box-padding">
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>
+                                    <strong>Name</strong>
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    <input id="enteredPrintJobName" type="text" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>        
+        <div class="padding-top-20">
+            <button id="addToPrintJobButton" type="button" class="btn btn-sm btn-primary">Create Print Job</button>
+        </div>
+    </div>
+</section>
+
+<aside id="sidebar" class="col-lg-7 col-md-7 col-sm-12">
+    <div id="printJobInformation">
+        <h3 class="printjob-section-title">
+            Current Print Job
+        </h3>
+        <div id="currentPrintJobName" class="printjob-name">
+        </div>
+        <div class="printjob-warning">
+            You can only configure 1 print job at a time.
+        </div>
+        <table class="table sidebar-shadow printjob-box-padding">
+            <tr>
+                <th>Actions</th>
+                <th>Total</th>
+                <th>Passed QA</th>
+                <th>Failed QA</th>
+            </tr>
+            <tr>
+                <td>
+                    @using (Html.BeginForm("Detail", "PrintJob", FormMethod.Get))
+                    {
+                        <input name="printJobId" class="printjob-ids" type="hidden" />
+                        <button type="submit" class="btn btn-xs btn-link unpadded-buton">View Customers</button>
+                    }
+
+                    @using (Html.BeginForm("QualityAssuranceIndexByType", "Transaction", new { type = 3, page = 1 }, FormMethod.Post))
+                    {
+                        <button type="submit" class="btn btn-xs btn-link unpadded-buton">View Failed</button>
+                    }
+                    <div id="sendToMailMergeButton">
+                        @using (Html.BeginForm("Export", "PrintJob", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input name="printJobId" class="printjob-ids" type="hidden" />
+                            <button type="submit" class="btn btn-xs btn-link unpadded-buton">Send To Mail Merge</button>
+                        }
+                    </div>
+                    <div id="sendToExcelButton">
+                        @using (Html.BeginForm("Export", "PrintJob", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input name="printJobId" class="printjob-ids" type="hidden" />
+                            <button type="submit" class="btn btn-xs btn-link unpadded-buton">Send To Excel</button>
+                        }
+                    </div>
+                    @using (Html.BeginForm("Cancel", "PrintJob", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input name="printJobId" class="printjob-ids" type="hidden" />
+                        <button type="submit" class="btn btn-xs btn-link unpadded-buton">Deactivate</button>
+                    }
+                </td>
+                <td>
+                    <h4 class="total-customers-text"></h4>
+                </td>
+                <td>
+                    <h4 class="passed-qa-customers-text"></h4>
+                </td>
+                <td>
+                    <h4 class="failed-qa-customers-text"></h4>
+                </td>
+            </tr>
+        </table>
+    </div>    
+</aside>
+<div class="modal fade" id="loadWindow" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h3 id="loadWindowTitle">Customers In Date Range</h3>
+            </div>
+            @using (Html.BeginForm("Configure", "PrintJob", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-footer">
+                    <button id="addViewWindow" type="submit" class="btn btn-sm btn-primary">Add</button>
+                    <button id="closeViewWindow" class="btn btn-sm btn-primary" data-dismiss="modal">Cancel</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="printJobsWindow" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h3 id="printJobsWindowTitle">Print Jobs In Date Range</h3>
+            </div>
+            @using (Html.BeginForm("Configure", "PrintJob", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-footer">
+                    <button id="closeViewWindow" class="btn btn-sm btn-primary" data-dismiss="modal">Cancel</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/Scripts/custom/printjob_config.js"></script>
+    <script src="~/Scripts/bootstrap/bootstrap-datepicker.js"></script>
+}
+@section styles
+{
+    <link href="~/Content/custom/printjob_config.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap/css/bootstrap-datepicker.css" rel="stylesheet" />
+}
+
+@*<div id="includeMissedCustomers" class="padding-top-20">
+        <h3 class="missed-customer-section-title">
+            Missed Customers
+        </h3>
+        <div>
+            <span class="printjob-warning">Customers outside the selected date range.</span>
+        </div>
+        <table id="includeMissedTable" class="table sidebar-shadow printjob-box-padding">
+            <tr>
+                <th>
+                    <button id="includeAllMissedButton" type="submit" class="btn btn-xs btn-link unpadded-buton">Include All</button>
+                </th>
+                <th>
+                    Scheduled Date
+                </th>
+                <th>
+                    Customer Information
+                </th>
+                <th>
+                    Property
+                </th>
+                <th>
+                    Agents
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" class="checkbox" />
+                </td>
+                <td>1/2/2014</td>
+                <td>Mr Philips</td>
+                <td>
+                    123 Main Street
+                    <br />
+                    Newark NJ 10322
+                </td>
+                <td>
+                    Katherine Adcock
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="printJobHistory">
+        <div class="padding-top-20">
+            <table>
+                <tr>
+                    <td>
+                        <h3>
+                            Most Recent Print Jobs
+                        </h3>
+                    </td>
+                    <td>
+                        &nbsp;&nbsp;
+                    </td>
+                    <td>
+                        @using (Html.BeginForm("History", "PrintJob", FormMethod.Get))
+                        {
+                            <button type="submit" class="btn btn-xs btn-link unpadded-buton">Find More</button>
+                        }
+                    </td>
+                </tr>
+            </table>
+            <table class="table sidebar-shadow printjob-box-padding">
+                <tr>
+                    <th>Actions</th>
+                    <th>Print Job Name</th>
+                    <th>Created Date</th>
+                </tr>
+                <tr>
+                    <td>
+                        @using (Html.BeginForm("DetailPureGold", "PrintJob", FormMethod.Get))
+                        {
+                            <button type="submit" class="btn btn-xs btn-link unpadded-buton" data-printjob-name="Print Job on Jan 12th">View Customers</button>
+                        }
+                    </td>
+                    <td>Print Job on Jan 12th</td>
+                    <td>
+                        1/7/2014
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @using (Html.BeginForm("DetailPureGold", "PrintJob", FormMethod.Get))
+                        {
+                            <button type="submit" class="btn btn-xs btn-link unpadded-buton" data-printjob-name="Worst Print Job Ever!">View Customers</button>
+                        }
+                    </td>
+                    <td>Worst Print Job Ever!</td>
+                    <td>
+                        1/7/2013
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @using (Html.BeginForm("DetailPureGold", "PrintJob", FormMethod.Get))
+                        {
+                            <button type="submit" class="btn btn-xs btn-link unpadded-buton" data-printjob-name="Print Job Gangnum Style">View Customers</button>
+                        }
+                    </td>
+                    <td>Print Job Gangnum Style</td>
+                    <td>
+                        5/7/2013
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>*@

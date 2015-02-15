@@ -1,0 +1,41 @@
+﻿h3 {
+    margin-top: 2px;
+}
+
+
+/*button.btn {
+    -ms-border-radius: 0px;
+    border-radius: 0px;
+}*/
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+#typeSelection, #search {
+    height: 28px;
+    width: 150px;
+    padding: 5px 5px 5px 5px;
+    border: 1px solid #c0c0c0;
+}
+
+#typeDropdown {
+    width: 70px;
+    border: 1px solid #c0c0c0;
+}
+
+/*.selected-value {
+    height: 35px;
+    width: 180px;
+    padding: 8px 5px 5px 5px;
+    border: 1px solid #008cba;
+}*/
+
+/*.dropdown-menu {
+    width: 180px;
+    border: 1px solid #008cba;
+}*/
+
+#search {
+    width: 260px;
+}

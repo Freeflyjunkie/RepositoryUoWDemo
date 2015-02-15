@@ -1,0 +1,395 @@
+﻿@model IEnumerable<AdminPureGold.WebUI.ViewModels.PrintJobPureGoldViewModel>
+
+@{
+    ViewBag.Title = "Pure Gold Detail";
+}
+@section header{
+    <h2>Print Job Details</h2>
+}
+<section class="col-lg-12 col-md-12">
+    <table class="table table-condensed table-responsive sidebar-shadow">
+        <tr>
+            <td>
+                @{
+                    var startdate = (DateTime)ViewBag.PrintJob.StartDate;
+                    var enddate = (DateTime)ViewBag.PrintJob.EndDate;
+                    <table>
+                        <tr>
+                            <td>
+                                <h5 class="blue-text">Start Date: </h5>
+                            </td>
+                            <td>
+                                <h5>@startdate.ToShortDateString()</h5>
+                            </td>
+                            <td>&nbsp;&nbsp;</td>
+                            <td>
+                                <h5 class="blue-text">End Date: </h5>
+                            </td>
+                            <td>
+                                <h5>@enddate.ToShortDateString()</h5>
+                            </td>
+                        </tr>
+                    </table>
+                }
+                <table>
+                    <tr>
+                        <td>
+                            @using (Html.BeginForm("Update", "PrintJob", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <input name="printJobId" type="hidden" value="@ViewBag.PrintJob.PrintJobId" />
+                                            <input name="page" type="hidden" value="@ViewBag.PageNumber" />
+                                            <input name="printJobDesc" type="text" style="width: 250px;" value="@ViewBag.PrintJob.PrintJobDesc" />
+                                        </td>
+                                        <td>
+                                            &nbsp;&nbsp;&nbsp;
+                                        </td>
+                                        <td>
+                                            <button type="submit" class="btn btn-xs btn-primary">Update Name</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            }
+                        </td>
+                        @if (ViewBag.PrintJob.PrintJobStatusId == 1)
+                        {
+                            <td>
+                                &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td>
+                                @if (ViewBag.PrintJob.PrintJobType.PrintJobTypeDesc.Contains("Newsletter"))
+                                {
+                                    using (Html.BeginForm("Export", "PrintJob", new { printJobId = ViewBag.PrintJob.PrintJobId }, FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-xs btn-primary">Send To Excel</button>
+                                    }
+                                }
+                                else
+                                {
+                                    using (Html.BeginForm("Export", "PrintJob", new { printJobId = ViewBag.PrintJob.PrintJobId }, FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-xs btn-primary">Send To Mail Merge</button>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td>
+                                @using (Html.BeginForm("MarkAsSuccessful", "PrintJob", new { printJobId = ViewBag.PrintJob.PrintJobId }
+                                    , FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-xs btn-primary">Mark As Successful</button>
+                                }
+                            </td>
+                            <td>
+                                &nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td>
+                                @Html.ActionLink("Add Missed Customers", "Missed", "PrintJob", new { printJobId = ViewBag.PrintJob.PrintJobId, page = 1 }, new { @class = "btn btn-xs btn-primary" })
+                            </td>
+                        }
+                        <td>
+                            &nbsp;&nbsp;&nbsp;
+                        </td>
+                        <td>
+                            @{
+                                var printJobStatusId = (Int32)ViewBag.PrintJob.PrintJobStatusId;
+                                switch (printJobStatusId)
+                                {
+                                    case 1: // Unexported
+                                        using (Html.BeginForm("Cancel", "PrintJob", new { printJobId = ViewBag.PrintJob.PrintJobId }, FormMethod.Post))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-xs btn-danger">Cancel</button>
+                                        }
+                                        break;
+
+                                        @*case 2: // Exported
+                                            using (Html.BeginForm("Copy", "PrintJob", new { printJobId = ViewBag.PrintJob.PrintJobId }, FormMethod.Post))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-xs btn-primary">Copy</button>
+                                            }
+                                            break;*@
+
+                                    case 3: //Cancelled
+                                        using (Html.BeginForm("Reactivate", "PrintJob", new { printJobId = ViewBag.PrintJob.PrintJobId }, FormMethod.Post))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-xs btn-primary">Reactivate</button>
+                                        }
+                                        break;
+                                }
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</section>
+<section class="col-lg-12 col-md-12 padding-bottom-10">
+    <table>
+        <tr>
+            <td>
+                <div class="dropdown">
+                    <div style="float: left" id="filterBySelection">All Statuses</div>
+                    <div class="btn btn-xs btn-default" data-toggle="dropdown"><span class="caret"></span></div>
+                    <ul class="dropdown-menu dropdown-menu-left" id="filterByDropDown">
+                        <li><a href="#" data-printjob-status-id="">All Statuses</a></li>
+                        @foreach (var status in ViewBag.PrintJobItemStatuses)
+                        {
+                            <li><a href="#" data-printjob-status-id="@status.PrintJobItemStatusId">@status.PrintJobItemStatusDesc</a></li>
+                        }
+                    </ul>
+                </div>
+            </td>
+            <td>
+                @using (Html.BeginForm("DetailPureGold", "PrintJob", FormMethod.Get))
+                {
+                    <input name="printJobId" type="hidden" value="@ViewBag.PrintJob.PrintJobId" />
+                    <input name="page" type="hidden" value="@ViewBag.PageNumber" />
+                    <input name="printJobItemStatusId" id="printJobItemStatusId" type="hidden" value="" />
+                    <button id="filter" type="submit" class="btn btn-xs btn-primary">Search</button>
+                }
+            </td>
+        </tr>
+    </table>
+
+</section>
+<section class="col-lg-12 col-md-12">
+    <table class="table table-condensed table-responsive sidebar-shadow">
+        @if (!Model.Any())
+        {
+            <tr>
+                <td class="alert alert-danger">
+                    <strong>This Print Job Is Empty</strong>
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <th>Actions</th>
+                <th>Scheduled Date</th>
+                <th>Agents</th>
+                <th>Property</th>
+                <th>Customer Name</th>
+                <th>Envelope</th>
+            </tr>
+            foreach (var printJobDetailViewModel in Model)
+            {
+                var altAddress1 = printJobDetailViewModel.PropertyAlternate == null ? "" : printJobDetailViewModel.PropertyAlternate.AltAddress1;
+                var altAddress2 = printJobDetailViewModel.PropertyAlternate == null ? "" : printJobDetailViewModel.PropertyAlternate.AltAddress2;
+                var altCity = printJobDetailViewModel.PropertyAlternate == null ? "" : printJobDetailViewModel.PropertyAlternate.AltCity;
+                var altState = printJobDetailViewModel.PropertyAlternate == null ? "" : printJobDetailViewModel.PropertyAlternate.AltState;
+                var altZip = printJobDetailViewModel.PropertyAlternate == null ? "" : printJobDetailViewModel.PropertyAlternate.AltZip;
+
+                var presentationDetails = printJobDetailViewModel.Transaction.PresentationDetail;
+                var customerName = presentationDetails == null ? "" : presentationDetails.CustomerName;
+                var envelope = presentationDetails == null ? "" : presentationDetails.LeaveBehindLetterName;
+
+                var rowClass = "";
+                if (printJobDetailViewModel.PrintJobToAppObjectToTransaction.PrintJobItemStatusId == 2)
+                {
+                    rowClass = "excluded-mailing";
+                }
+                <tr class="@rowClass">
+                    <td>
+                        @Html.ActionLink("Quality Assurance", "QualityAssuranceEditByTransactionId", "Transaction",
+                      new
+                      {
+                          transactionId = printJobDetailViewModel.Transaction.TransactionId,
+                          currentPrintJobPage = ViewBag.PageNumber,
+                          currentPrintJobItemStatusId = ViewBag.PrintJobItemStatusSelected
+                      },
+                            new { @class = "btn btn-xs btn-link unpadded-buton" })
+
+                        @{
+                            var action = "ExcludeAppObjectToTransaction";
+                            if (printJobDetailViewModel.PrintJobToAppObjectToTransaction.PrintJobItemStatusId == 2)
+                            {
+                                action = "IncludeAppObjectToTransaction";
+                            }
+
+                            using (Html.BeginForm(action, "PrintJob", new
+                            {
+                                printJobId = ViewBag.PrintJob.PrintJobId,
+                                page = ViewBag.PageNumber,
+                                appObjectToTransactionId = printJobDetailViewModel.PrintJobToAppObjectToTransaction.AppObjectToTransactionId,
+                                printJobItemStatusId = ViewBag.PrintJobItemStatusSelected
+                            }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-xs btn-link unpadded-buton">@action.Replace("AppObjectToTransaction", "")</button>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @foreach (var pureGoldMailing in printJobDetailViewModel.PureGoldMailings)
+                        {
+                           <div>@pureGoldMailing.ScheduledPrintDate.ToShortDateString()</div> 
+                        }                                                    
+                    </td>
+                    <td>
+                        @*OWNERSHIP QA CHECK*@
+                        @if (!printJobDetailViewModel.Transaction.TransactionToRelates.Any(t => t.Active == "A"))
+                        {
+                            <div title="No agents assigned to the customer" class="shadow-on-text red-text pg-tooltip">Missing</div>
+                        }
+                        else
+                        {
+                            foreach (var transactionToRelate in printJobDetailViewModel.Transaction.TransactionToRelates)
+                            {
+                                if (transactionToRelate.Active == "A")
+                                {
+                                    var agentPerson = printJobDetailViewModel.AgentViewModels.SingleOrDefault(avm =>
+                                        avm.PersonNumber == transactionToRelate.PersonNumber);
+
+                                    if (agentPerson != null)
+                                    {
+                                        <div>@agentPerson.RelateToName.LastName, &nbsp;@agentPerson.RelateToName.FirstName</div>
+                                    }
+                                    else
+                                    {
+                                        <div title="Report this to IT. Issue finding person" class="shadow-on-text red-text pg-tooltip">Can't Find Person Number</div>
+                                    }
+                                }
+                            }
+                        }
+                    </td>
+                    @*PROPERTY QA CHECK*@
+                    @{
+                        var valid = printJobDetailViewModel.Transaction.AtlasXPropertyId != 440000000;
+                        var classes = "";
+                        var title = "";
+                        if (!valid)
+                        {
+                            classes = "red-text shadow-on-text pg-tooltip";
+                            title = "Address failed validation with the USPS";
+                        }
+                        <td>
+                            <div title="@title" class="@classes">
+                                @altAddress1
+                                @altAddress2
+                                <br />
+                                @altCity
+                                @altState
+                                @altZip
+                            </div>
+                        </td>
+                    }
+                    <td>
+                        @*CUSTOMER QA CHECK*@
+                        @if (printJobDetailViewModel.Transaction.PresentationDetail == null)
+                        {
+                            <div title="Missing customer information" class="shadow-on-text red-text pg-tooltip">Missing</div>
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(printJobDetailViewModel.Transaction.PresentationDetail.CustomerName))
+                            {
+                                <div title="Missing customer information" class="shadow-on-text red-text pg-tooltip">Missing</div>
+                            }
+                            else
+                            {
+                                @customerName
+                            }
+                        }
+                    </td>
+                    <td>
+                        @*CUSTOMER QA CHECK*@
+                        @if (printJobDetailViewModel.Transaction.PresentationDetail == null)
+                        {
+                            <div title="Missing envelope information" class="shadow-on-text red-text pg-tooltip">Missing</div>
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(printJobDetailViewModel.Transaction.PresentationDetail.LeaveBehindLetterName))
+                            {
+                                <div title="Missing envelope information" class="shadow-on-text red-text pg-tooltip">Missing</div>
+                            }
+                            else
+                            {
+                                @envelope
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    @if (Model.Any())
+    {
+        <table>
+            <tr>
+                <td>
+                    @if (ViewBag.HasPreviousPage)
+                    {
+                        @Html.ActionLink("First", "Detail", new
+                    {
+                        printJobId = ViewBag.PrintJob.PrintJobId,
+                        page = 1,
+                        printJobItemStatusId = ViewBag.PrintJobItemStatusSelected
+                    }, new { @class = "btn btn-xs btn-primary" })
+                        @Html.Raw("&nbsp;")
+                        @Html.ActionLink("Previous", "Detail", new
+                    {
+                        printJobId = ViewBag.PrintJob.PrintJobId,
+                        page = ViewBag.PageNumber - 1,
+                        printJobItemStatusId = ViewBag.PrintJobItemStatusSelected
+                    }, new { @class = "btn btn-xs btn-primary" })
+                    }
+                </td>
+
+                <td>
+                    @if (ViewBag.HasNextPage)
+                    {
+                        @Html.ActionLink("Next", "Detail", new
+                        {
+                            printJobId = ViewBag.PrintJob.PrintJobId,
+                            page = ViewBag.PageNumber + 1,
+                            printJobItemStatusId = ViewBag.PrintJobItemStatusSelected
+                        }, new { @class = "btn btn-xs btn-primary" })
+                        @Html.Raw("&nbsp;")
+                        @Html.ActionLink("Last", "Detail", new
+                        {
+                            printJobId = ViewBag.PrintJob.PrintJobId,
+                            page = ViewBag.PageCount,
+                            printJobItemStatusId = ViewBag.PrintJobItemStatusSelected
+                        }, new { @class = "btn btn-xs btn-primary" })
+                    }
+                </td>
+                <td>
+                    &nbsp;&nbsp;
+                </td>
+                <td class="blue-text shadow-on-text">
+                    Page @(ViewBag.PageCount < ViewBag.PageNumber ? 0 : ViewBag.PageNumber)
+                    of @ViewBag.PageCount
+                </td>
+                <td>
+                    &nbsp;&nbsp;
+                </td>
+                <td class="blue-text shadow-on-text">
+                    Total @ViewBag.Total
+                </td>
+            </tr>
+        </table>
+    }
+</section>
+@section styles
+    {
+    <link href="~/Content/custom/printjob_detail.css" rel="stylesheet" />
+}
+
+@section scripts
+    {
+    <script src="~/Scripts/custom/printjob_detail.js"></script>
+}

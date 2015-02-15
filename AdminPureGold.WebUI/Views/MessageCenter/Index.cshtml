@@ -1,0 +1,64 @@
+﻿@model AdminPureGold.WebUI.ViewModels.CorpCommViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Corrections - Email Message</h2>
+
+
+<div class="row">
+    <article class="col-lg-12 col-md-12">
+        <table>
+            <tr>
+                <td>
+                    <h3>Searh Agents</h3>
+                </td>
+                <td style="width: 25px">
+                    <img id="loadingAgents" src="~/Images/loading.gif" style="display: none" />
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <input type="text" class="dropdown-toggle" data-toggle="dropdown" id="agentSelection" placeholder="last name or associate #" />
+                        <ul class="dropdown-menu" id="agentDropDown"></ul>
+                    </div>
+                </td>
+                <td>
+                    @using (Html.BeginForm("GetCorrectionsForPerson", "MessageCenter", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input id="personNumber" name="personNumber" type="hidden" value="" />
+                        <input type="submit" class="btn btn-sm btn-primary" value="Search For Corrections" />
+                    }
+                </td>
+            </tr>
+        </table>
+    </article>
+</div>
+
+@if (ViewBag.AgentMessage != null)
+{
+    <br /><br />
+    <span>Highlight everything under the line (double click to the right of the email message) . . . then CTRL+C to copy.  Start a new email message, and CTRL+V to paste the message in the body area of the new email message.</span>
+    <span>The auto-email process attmepted to send the message to: <a href="mailto:@ViewBag.AgentEmail&subject=Pure Gold Corrections">@ViewBag.AgentEmail</a></span>
+    <br /><br />
+    <span>
+        Also, you can @Html.ActionLink("Update their message center message", "UpdateMessageCenter", new { personNumber = ViewBag.PersonNumber })
+        <br />
+        @ViewBag.MessageCenterUpdated
+    </span>
+    <br />
+    <hr />
+
+    <div> @Html.Raw(ViewBag.AgentMessage) </div><br />
+}
+
+@section scripts
+{
+    <script src="~/Scripts/custom/message_center.js"></script>
+    <script src="~/Scripts/jquery/validate/jquery.unobtrusive-ajax.min.js"></script>
+}
+@section styles
+{
+    <link href="~/Content/custom/transaction_qa_edit.css" rel="stylesheet" />
+    <link href="~/Content/custom/_change_request_windows.css" rel="stylesheet" />
+}

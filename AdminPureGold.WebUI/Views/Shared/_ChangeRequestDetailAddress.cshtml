@@ -1,0 +1,24 @@
+﻿@model AdminPureGold.ApplicationServices.DTO.ChangeRequestDetailAddressParsed
+<table class="table table-condensed table-responsive table-no-margin">
+    <tr>
+        <th style="border-top: none">Previous Address</th>
+        @if (Model.NewAtlasXPropertyId != 440000000)
+        {
+            <th style="border-top: none">New Address <span title="Address has been validated by the USPS" class="green-text shadow-on-text pg-tooltip">Validated</span></th>
+        }
+        else
+        {
+            <th style="border-top: none">New Address <span title="Address failed validation with the USPS" class="red-text shadow-on-text pg-tooltip">Not Valid</span></th>
+        }
+    </tr>
+    <tr>
+        <td>
+            <div>@Model.OldAddress1</div>
+            <div>@Model.OldCity &nbsp; @Model.OldState &nbsp; @Model.OldZip</div>
+        </td>
+        <td>
+            <div>@Model.NewAddress1</div>
+            <div>@Model.NewCity &nbsp; @Model.NewState &nbsp; @Model.NewZip</div>
+        </td>
+    </tr>
+</table>

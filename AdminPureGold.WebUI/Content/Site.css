@@ -1,0 +1,255 @@
+﻿#menu {
+    margin-bottom: 5px;
+    -ms-border-radius: 10px;
+    border-radius: 10px;
+}
+
+input[type=text], input[type=number], input[type=password] {   
+    background-color: #ffffe1;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px; 
+    -ms-border-radius: 10px;
+    outline: white;
+    border-radius: 10px;    
+    -webkit-box-shadow: inset 0px 0px 5px 0px #c0c0c0;
+    -moz-box-shadow: inset 0px 0px 5px 0px #c0c0c0; 
+    -ms-box-shadow: inset 0px 0px 5px 0px #c0c0c0; 
+    box-shadow: inset 0px 0px 5px 0px #c0c0c0;
+}
+
+.btn-primary, .btn-danger {
+    -ms-border-radius: 10px;
+    border-radius: 10px;
+    outline: white;
+}
+
+hr {
+    margin: 5px;
+}
+
+h2 {
+    -webkit-text-shadow: 5px 5px 5px #c0c0c0;
+    -ms-text-shadow: 5px 5px 5px #c0c0c0;
+    text-shadow: 5px 5px 5px #c0c0c0;
+    color: #008cba;
+    margin-top: 0px;
+}
+
+h1 {
+    margin: 0px;
+}
+
+h1, h3, h4 {
+    -webkit-text-shadow: 5px 5px 5px #c0c0c0;
+    -ms-text-shadow: 5px 5px 5px #c0c0c0;
+    text-shadow: 5px 5px 5px #c0c0c0;
+    margin-top: 0px;
+}
+
+article {
+    padding-bottom: 10px;
+}
+
+.align-bottom {
+    display: table-cell;
+    vertical-align: bottom;
+}
+
+.h2-height {
+    height: 35px;
+}
+
+footer h4 {
+    -webkit-text-shadow: 5px 5px 5px #c0c0c0;
+    -ms-text-shadow: 5px 5px 5px #c0c0c0;
+    text-shadow: 5px 5px 5px #c0c0c0;
+}
+
+.alert {
+    padding: 0px 0px 0px 10px;
+}
+
+    .alert h5 {
+        font-weight: 900;
+    }
+
+label {
+    font-weight: 900;
+}
+
+.field-validation-error {
+    color: #b94a48;
+    -webkit-text-shadow: 5px 5px 5px #c0c0c0;
+    -ms-text-shadow: 5px 5px 5px #c0c0c0;
+    text-shadow: 5px 5px 5px #c0c0c0;
+    display: inline-block;
+    *display: inline;
+    padding-left: 5px;
+    vertical-align: middle;
+    *zoom: 1;
+    font-size: 13px;
+}
+
+.commentTable {
+    margin-bottom: 0px;
+}
+
+.commentFromPerson {
+    float: left;
+    -webkit-text-shadow: 2px 2px 2px #c0c0c0;
+    -ms-text-shadow: 2px 2px 2px #c0c0c0;
+    text-shadow: 2px 2px 2px #c0c0c0;
+    padding-right: 5px;
+    font-style: italic;
+    font-weight: 900;
+}
+
+.change-request-details-header {
+    -webkit-text-shadow: 2px 2px 2px #c0c0c0;
+    -ms-text-shadow: 2px 2px 2px #c0c0c0;
+    text-shadow: 2px 2px 2px #c0c0c0;
+    padding-right: 5px;
+    font-style: italic;
+    font-weight: 900;
+}
+
+.commentCreatedDate {
+    -webkit-text-shadow: 2px 2px 2px #c0c0c0;
+    -ms-text-shadow: 2px 2px 2px #c0c0c0;
+    text-shadow: 2px 2px 2px #c0c0c0;
+    font-style: italic;
+    font-weight: 900;
+}
+
+.comment {
+    clear: both;
+}
+
+.search-box {
+    height: 36px;
+    width: 280px;
+}
+
+.field {
+    width: 170px;
+    font-weight: 900;
+}
+
+.field-sm {
+    width: 60px;
+    font-weight: 900;
+}
+
+.sidebar-shadow {
+    -webkit-box-shadow: 2px 2px 2px 2px #c0c0c0;
+    -ms-box-shadow: 2px 2px 2px 2px #c0c0c0;
+    box-shadow: 2px 2px 2px 2px #c0c0c0;
+}
+
+.padding-top-10 {
+    padding-top: 10px;
+}
+
+.padding-top-20 {
+    padding-top: 20px;
+}
+
+.padding-top-30 {
+    padding-top: 30px;
+}
+
+.padding-bottom-10 {
+    padding-bottom: 10px;
+}
+
+.padding-bottom-8 {
+    padding-bottom: 8px;
+}
+
+.padding-right-10 {
+    padding-right: 10px;
+}
+
+.padding-right-20 {
+    padding-right: 20px;
+}
+
+.padding-left-10 {
+    padding-left: 10px;
+}
+
+.padding-left-20 {
+    padding-left: 20px;
+}
+
+.align-top {
+    vertical-align: top;
+}
+
+.action-button-column-width-90 {
+    width: 90px;
+}
+
+.action-button-column-width-45 {
+    width: 45px;
+}
+
+.red-border {
+    border: 1px solid red;
+}
+
+.table-width {
+    width: 100%;
+}
+
+.table-50-split tbody > tr > td {
+    width: 50%;
+}
+
+.table-no-margin {
+    margin: 0px;
+}
+
+.unpadded-buton {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+
+.green-text {
+    color: #009d14;
+}
+
+.blue-text {
+    color: #008cba;
+}
+
+.red-text {
+    color: #ff0000;
+}
+
+.shadow-on-text {
+    -webkit-text-shadow: 2px 2px 2px #c0c0c0;
+    -ms-text-shadow: 2px 2px 2px #c0c0c0;
+    text-shadow: 2px 2px 2px #c0c0c0;
+}
+
+.put-cursor {
+    cursor: pointer;
+}
+
+.pg-tooltip {
+    cursor: pointer;
+}
+
+.open-close-window-button {
+}
+
+.open-deny-window-button {
+}
+
+.open-comment-window-button {
+}
+
+.cr-category-tooltip {
+}

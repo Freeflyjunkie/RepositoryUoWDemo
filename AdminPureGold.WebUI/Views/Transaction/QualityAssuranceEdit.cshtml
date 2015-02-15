@@ -1,0 +1,1102 @@
+﻿@using System.Web.UI.WebControls
+@using AdminPureGold.Domain.Models.Mrc
+@using AdminPureGold.WebUI.ViewModels.Common
+@model AdminPureGold.WebUI.ViewModels.TransactionViewModel
+
+@{
+    ViewBag.Title = "Quality Assurance";
+}
+<section class="col-lg-8 col-md-8 col-sm-12">
+    <div class="row">
+        <article class="col-lg-12 col-md-12">
+            <h2>Change Requests For Customer</h2>
+            <table class="table table-condensed table-responsive sidebar-shadow">
+                @{
+                    if (!Model.Transaction.ChangeRequests.Any())
+                    {
+                <tr>
+                    <td class="alert alert-info">
+                        <strong>No Change Requests</strong>
+                    </td>
+                </tr>
+                    }
+                    else
+                    {
+                <tr>
+                    <th>Actions</th>
+                    <th>Status</th>
+                    <th>Category</th>
+                    <th>Details</th>
+                </tr>
+                        foreach (var changeRequest in Model.Transaction.ChangeRequests)
+                        {
+                <tr>
+                    <td class="padding-right-20">
+                        @Html.Partial("_ChangeRequestActions", new ChangeRequestActionViewModel { ChangeRequest = changeRequest, ControllerName = "Transaction" })
+                    </td>
+                    <td class="padding-right-20">
+                        @changeRequest.ChangeRequestStatus.ChangeRequestDescription
+                    </td>
+                    <td style="width: 80px; vertical-align: top">
+                        @Html.Partial("_ChangeRequestCategory", changeRequest.ChangeRequestCategory)
+                    </td>
+                    <td>
+                        @Html.Partial("_ChangeRequestDetail", new ChangeRequestDetailViewModel
+                                        {
+                                            ChangeRequest = changeRequest,
+                                            ChangeRequestDetailParsed = Model.ChangeRequestDetailParsed.SingleOrDefault(parsed => parsed.ChangeRequestId == changeRequest.ChangeRequestId)
+                                        })
+                    </td>
+                </tr>
+                        }
+                    }
+                }
+            </table>
+        </article>
+    </div>
+    <div class="row">
+        <article class="col-lg-12 col-md-12">
+            <h2>Customer Name and Envelope</h2>
+            @using (Html.BeginForm("SaveTransactionData", "Transaction", FormMethod.Post))
+            {
+            @Html.AntiForgeryToken()
+            <table class="table table-condensed table-responsive sidebar-shadow">
+                <tr>
+                    <th>Actions</th>
+                    <th>Customer Name</th>
+                    <th>Envelope</th>
+                </tr>
+                <tr>
+                    <td>
+                        <input id="transactionid" name="transactionid" type="hidden" value="@Model.Transaction.TransactionId" />
+                        <button type="submit" class="btn btn-xs btn-link unpadded-buton">Save</button>
+                    </td>
+                    <td>
+                        @{
+                var customerName = string.Empty;
+                if (Model.Transaction.PresentationDetail != null)
+                {
+                    customerName = Model.Transaction.PresentationDetail.CustomerName;
+                }
+                            <input id="customerName" name="customerName" class="transaction-data-textbox" type="text" value="@customerName" />
+                        }
+                    </td>
+                    <td>
+                        @{
+                var envelope = string.Empty;
+                if (Model.Transaction.PresentationDetail != null)
+                {
+                    envelope = Model.Transaction.PresentationDetail.LeaveBehindLetterName;
+                }
+                            <input id="nameOnEnvelope" name="nameOnEnvelope" class="transaction-data-textbox" type="text" value="@envelope" />
+                        }
+                    </td>
+                </tr>
+            </table>
+            }
+        </article>
+    </div>
+    <div class="row">
+        <article class="col-lg-12 col-md-12">
+            @using (Html.BeginForm("SaveTransactionProperty", "Transaction", FormMethod.Post))
+            {
+            @Html.AntiForgeryToken()
+            <table>
+                <tr>
+                    <td>
+                        <h2>Property Is</h2>
+                    </td>
+                    <td>
+                        &nbsp;&nbsp;
+                    </td>
+                    <td>
+                        @if (Model.Transaction.AtlasXPropertyId != 440000000)
+                            {
+                            <h2 class="green-text">Validated</h2>
+                            }
+                            else
+                            {
+                            <h2 class="red-text">Not Valid</h2>
+                            }
+                    </td>
+                </tr>
+            </table>
+            <input id="transactionId" name="transactionId" type="hidden" value="@Model.Transaction.TransactionId" />
+            <table class="table table-condensed table-responsive sidebar-shadow">
+                <tr>
+                    <th>Actions</th>
+                    <th>Address 1</th>
+                    <th>Address 2</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Zip</th>
+                </tr>
+                <tr>
+                    <td class="action-button-column-width-90">
+                        <button id="propertyUspsButton" type="button" class="btn btn-xs btn-link unpadded-buton">Ask USPS</button>&nbsp;<img id="askingUSPS" src="~/Images/loading.gif" style="display: none" />
+                        <br />
+                        <button id="propertyBingButton" type="button" class="btn btn-xs btn-link unpadded-buton">Ask BING</button>&nbsp;<img id="askingBing" src="~/Images/loading.gif" style="display: none" />
+                        <br />
+                        <button id="propertySaveButton" type="submit" class="btn btn-xs btn-link unpadded-buton">Save</button>
+                    </td>
+                    @{
+                            var alternateProperty = Model.PropertyAlternate;
+                            var altAddress1 = alternateProperty == null ? "" : alternateProperty.AltAddress1;
+                            var altAddress2 = alternateProperty == null ? "" : alternateProperty.AltAddress2;
+                            var altCity = alternateProperty == null ? "" : alternateProperty.AltCity;
+                            var altState = alternateProperty == null ? "" : alternateProperty.AltState;
+                            var altZip = alternateProperty == null ? "" : alternateProperty.AltZip;
+
+                        <td>
+                            <input id="address1" name="address1" type="text" value="@altAddress1" />
+                            @if (@Model.Transaction.AtlasXPropertyId != 440000000)
+                                {
+                                <div class="validPropertyInformation" title="Validated by USPS">@Model.Property.Address1</div>
+                                }
+                        </td>
+                        <td>
+                            <input id="address2" name="address2" type="text" style="width: 90px" value="@altAddress2" />
+                            @if (@Model.Transaction.AtlasXPropertyId != 440000000)
+                                {
+                                <div class="validPropertyInformation" title="Validated by USPS">@Model.Property.Address2</div>
+                                }
+                        </td>
+                        <td>
+                            <input id="city" name="city" type="text" style="width: 90px" value="@altCity" />
+                            @if (@Model.Transaction.AtlasXPropertyId != 440000000)
+                                {
+                                <div class="validPropertyInformation" title="Validated by USPS">@Model.Property.City</div>
+                                }
+                        </td>
+                        <td>
+                            <input id="state" name="state" type="text" style="width: 40px" value="@altState" />
+                            @if (@Model.Transaction.AtlasXPropertyId != 440000000)
+                                {
+                                <div class="validPropertyInformation" title="Validated by USPS">@Model.Property.State</div>
+                                }
+                        </td>
+                        <td>
+                            <input id="zip" name="zip" type="text" style="width: 60px" value="@altZip" />
+                            @if (@Model.Transaction.AtlasXPropertyId != 440000000)
+                                {
+                                <div class="validPropertyInformation" title="Validated by USPS">@Model.Property.Zip</div>
+                                }
+                        </td>
+                    }
+                </tr>
+                <tr id="uspsTable" style="display: none">
+                    <td colspan="2">
+                        <table class="table-width">
+                            <tr>
+                                <td class="align-top action-button-column-width-90">
+                                    <button id="uspsTableUseButton" type="button" class="btn btn-xs btn-link unpadded-buton">Use USPS</button>&nbsp;<img id="usingUsps" src="~/Images/loading.gif" style="display: none" />
+                                </td>
+                                <td>
+                                    <table id="uspsValidatedAddressTable">
+                                        <tr>
+                                            <td>
+                                                <div title="Suggested by USPS" id="uspsAddress1"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div style="float: left" title="Suggested by USPS" id="uspsCity"></div>
+                                                <div style="float: left" title="Suggested by USPS" id="uspsState"></div>
+                                                <div style="float: left" title="Suggested by USPS" id="uspsZip"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div style="float: left" class="inValidPropertyInformation" title="Suggested by USPS" id="uspsUnknown">Unknown Property Address</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td colspan="4">
+                        <label id="uspsMessage" class="usps-validation-description"></label>
+                    </td>
+                </tr>
+                <tr id="bingTable" style="display: none">
+                    <td colspan="2">
+                        <table class="table-width">
+                            <tr>
+                                <td class="align-top action-button-column-width-90">
+                                    <button id="bingTableUseButton" type="button" class="btn btn-xs btn-link unpadded-buton">Use BING</button>&nbsp;<img id="usingBing" src="~/Images/loading.gif" style="display: none" />
+                                </td>
+                                <td>
+                                    <table id="bingValidatedAddressTable">
+                                        <tr>
+                                            <td>
+                                                <div class="quaziValidPropertyInformation" title="Suggested by BING" id="bingAddress1"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div style="float: left;" class="quaziValidPropertyInformation" title="Suggested by BING" id="bingCity"></div>
+                                                <div style="float: left;" class="quaziValidPropertyInformation" title="Suggested by BING" id="bingState"></div>
+                                                <div style="float: left" class="quaziValidPropertyInformation" title="Suggested by BING" id="bingZip"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div style="float: left" class="inValidPropertyInformation" title="Suggested by BING" id="bingUnknown">Unknown Property Address</div>
+                                    <input id="locationIndex" type="hidden" value="0" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td colspan="4">
+                        <label id="bingMessage" class="usps-validation-description"></label>
+                    </td>
+                </tr>
+            </table>
+            }
+        </article>
+    </div>
+    <div class="row">
+        <article class="col-lg-12 col-md-12">
+            <table>
+                <tr>
+                    <td>
+                        <h2>Agents</h2>
+                    </td>
+                    <td style="width: 25px">
+                        <img id="loadingAgents" src="~/Images/loading.gif" style="display: none" />
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <input type="text" class="dropdown-toggle" data-toggle="dropdown" id="agentSelection" placeholder="last name or associate #" />
+                            <ul class="dropdown-menu" id="agentDropDown"></ul>
+                        </div>
+                    </td>
+                    <td>
+                        @using (Html.BeginForm("AddAgentToTransaction", "Transaction", FormMethod.Post))
+                        {
+                        @Html.AntiForgeryToken()
+                        <input id="transactionId" name="transactionId" type="hidden" value="@Model.Transaction.TransactionId" />
+                        <input id="addedPersonNumber" name="addedPersonNumber" type="hidden" value="" />
+                        <input id="addedRelationshipNumber" name="addedRelationshipNumber" type="hidden" value="" />
+                        <input id="addedOfficeId" name="addedOfficeId" type="hidden" value="" />
+                        <input type="submit" class="btn btn-sm btn-primary" value="Add" />
+                        }
+                    </td>
+                </tr>
+            </table>
+            <table class="table table-condensed table-responsive sidebar-shadow">
+                @{
+                    if (!Model.Transaction.TransactionToRelates.Any())
+                    {
+                <tr>
+                    <td class="alert alert-danger">
+                        <strong>No Active Agents Assigned</strong>
+                    </td>
+                </tr>
+                    }
+                    else
+                    {
+                <tr>
+                    <th>Actions</th>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Primary Agent</th>
+                </tr>
+                        foreach (var transactionToRelate in Model.Transaction.TransactionToRelates.OrderBy(t => t.SortOrder))
+                        {
+                            var activeFlag = transactionToRelate.Active == "A" ? "I" : "A";
+                            var buttonText = transactionToRelate.Active == "A" ? "Deactivate" : "Activate";
+                            var rowClass = transactionToRelate.Active == "I" ? "agent-table-inactive-agent" : "";
+                            var agentViewModel = Model.AgentViewModels.SingleOrDefault(a => a.PersonNumber == transactionToRelate.PersonNumber);
+
+                <tr class="@rowClass">
+                    <td>
+                        @using (Html.BeginForm("UpdateAgentStatus", "Transaction", FormMethod.Post))
+                                    {
+                                    @Html.AntiForgeryToken()
+                                    <input id="transactionId" name="transactionId" type="hidden" value="@Model.Transaction.TransactionId" />
+                                    <input id="relationshipNumber" name="relationshipNumber" type="hidden" value="@transactionToRelate.RelationshipNumber" />
+                                    <input id="status" name="status" type="hidden" value="@activeFlag" />
+                                    <button type="submit" class="btn btn-xs btn-link unpadded-buton">@buttonText</button>
+                                    }
+                        @if (transactionToRelate.Active == "A")
+                                    {
+                                        using (Html.BeginForm("UpdateAgentPrimary", "Transaction", FormMethod.Post))
+                                        {
+                                    @Html.AntiForgeryToken()
+                                    <input id="transactionId" name="transactionId" type="hidden" value="@Model.Transaction.TransactionId" />
+                                    <input id="relationshipNumber" name="relationshipNumber" type="hidden" value="@transactionToRelate.RelationshipNumber" />
+                                    <button type="submit" class="btn btn-xs btn-link unpadded-buton">Make Primary Agent</button>
+                                        }
+                                        using (Html.BeginForm("UpdateAgentSecondary", "Transaction", FormMethod.Post))
+                                        {
+                                    @Html.AntiForgeryToken()
+                                    <input id="transactionId" name="transactionId" type="hidden" value="@Model.Transaction.TransactionId" />
+                                    <input id="relationshipNumber" name="relationshipNumber" type="hidden" value="@transactionToRelate.RelationshipNumber" />
+                                    <button type="submit" class="btn btn-xs btn-link unpadded-buton">Make Secondary Agent</button>
+                                        }
+                                    }
+                        <a class="agent-office-details" data-person-number="@transactionToRelate.PersonNumber" href="#">View Office Details</a>
+                    </td>
+                    <td style="text-align: center">
+                        @{
+                                    var sitePath = "https://www.weichertone.com/weichertone/library/production/images/core/";
+                                    if (agentViewModel.PersonToImage.ImagePath != null)
+                                    {
+                                        sitePath = sitePath + agentViewModel.PersonToImage.ImagePath;
+                                    }
+                                    else
+                                    {
+                                        sitePath = sitePath + "tNoAscImage.jpg";
+                                    }
+
+                                    <img src="@sitePath" class="agent-photo" />
+                        }
+                    </td>
+                    <td>
+                        @if (agentViewModel != null)
+                                    {
+                                    <div>
+                                        @agentViewModel.RelateToName.LastName ,&nbsp; @agentViewModel.RelateToName.FirstName
+                                    </div>
+                                    <div>
+                                        @{
+                                        var iphone = Convert.ToInt64(agentViewModel.RelateToPhone.PhoneNumber);
+                                        var formattedPhone = String.Format("{0:(###) ###-####}", iphone);
+                                            @formattedPhone
+                                        }
+                                    </div>
+                                    <div>
+                                        @agentViewModel.RelateToEmail.EmailAddress
+                                    </div>
+                                    <div>
+                                        @agentViewModel.Office.FriendlyOfficeName&nbsp;-&nbsp;@agentViewModel.Office.OfficeId
+                                    </div>
+                                    }
+                    </td>
+                    <td>
+                        @if (transactionToRelate.SortOrder == 1)
+                                    {
+                                    <img src="~/Images/Common/green_check.png" height="70" />
+                                    }
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="border: none">
+                        @if (agentViewModel != null)
+                                    {
+                                        var tableid = "table" + @transactionToRelate.PersonNumber;
+                                    <table id="@tableid" class="table table-bordered table-no-margin" style="display: none">
+                                        <tr>
+                                            <th>Contact Information</th>
+                                            <th>Address</th>
+                                            <th>Sales Manager</th>
+                                            <th>Processing Manager</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    @{
+                                        var iphone = Convert.ToInt64(agentViewModel.Office.Phone);
+                                        var formattedPhone = String.Format("{0:(###) ###-####}", iphone);
+                                                        @formattedPhone
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    @agentViewModel.Office.Address
+                                                </div>
+                                                <div>
+                                                    @agentViewModel.Office.City  &nbsp;@agentViewModel.Office.State,  &nbsp;@agentViewModel.Office.ZipCode
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    @if (agentViewModel.OfficeSalesManager.RelateToNames.Any())
+                                                        {
+                                                        <span>@agentViewModel.OfficeSalesManager.RelateToNames.First().LastName, &nbsp;@agentViewModel.OfficeSalesManager.RelateToNames.First().FirstName</span>
+                                                        }
+                                                </div>
+                                                <div>
+                                                    @if (agentViewModel.OfficeSalesManager.RelateToPhones.Any())
+                                                        {
+                                                            iphone = Convert.ToInt64(agentViewModel.OfficeSalesManager.RelateToPhones.First().PhoneNumber);
+                                                            formattedPhone = String.Format("{0:(###) ###-####}", iphone);
+                                                        @formattedPhone
+                                                        }
+                                                </div>
+                                                <div>
+                                                    @if (agentViewModel.OfficeSalesManager.RelateToEmails.Any())
+                                                        {
+                                                            foreach (var email in agentViewModel.OfficeSalesManager.RelateToEmails)
+                                                            {
+                                                        <span>@email.EmailAddress</span>
+                                                            }
+                                                        }
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    @if (agentViewModel.ProcessingManager.RelateToNames.Any())
+                                                        {
+                                                        <span>@agentViewModel.ProcessingManager.RelateToNames.First().LastName, &nbsp;@agentViewModel.ProcessingManager.RelateToNames.First().FirstName</span>
+                                                        }
+                                                </div>
+                                                <div>
+                                                    @if (agentViewModel.ProcessingManager.RelateToPhones.Any())
+                                                        {
+                                                            iphone = Convert.ToInt64(agentViewModel.ProcessingManager.RelateToPhones.First().PhoneNumber);
+                                                            formattedPhone = String.Format("{0:(###) ###-####}", iphone);
+                                                        @formattedPhone
+                                                        }
+                                                </div>
+                                                <div>
+                                                    @if (agentViewModel.ProcessingManager.RelateToEmails.Any())
+                                                        {
+                                                            foreach (var email in agentViewModel.ProcessingManager.RelateToEmails)
+                                                            {
+                                                        <span>@email.EmailAddress</span>
+                                                            }
+                                                        }
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    }
+                    </td>
+                </tr>
+                        }
+                    }
+                }
+            </table>
+        </article>
+    </div>
+    <div class="row">
+        <article class="col-lg-12 col-md-12">
+            <h2>Mailings</h2>
+            <table class="table table-condensed table-responsive sidebar-shadow">
+                @{
+                    if (!Model.Mailings.Any())
+                    {
+                        <tr>
+                            <td class="alert alert-danger">
+                                <strong>No Mailings</strong>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <th>Actions</th>
+                            <th>Mailing</th>
+                            <th>Scheduled Mail Date</th>
+                            <th>Actual Print Date</th>
+                        </tr>
+                        foreach (var mailing in Model.Mailings)
+                        {
+                            var printJobToAppObjectToTransaction = Model.PrintJobToAppObjectToTransactions.SingleOrDefault(item => item.AppObjectToTransactionId == mailing.AppObjectToTransactionId);
+                            var inCurrentPrintJobClasses = "";
+                            var inCurrentPrintJobTitle = "";
+                            if (printJobToAppObjectToTransaction != null)
+                            {
+                                inCurrentPrintJobClasses = "alert alert-info pg-tooltip";
+                                inCurrentPrintJobTitle = "In Current Print Job";
+                            }
+                            <tr class="@inCurrentPrintJobClasses" title="@inCurrentPrintJobTitle">
+                                <td>
+                                    @if (printJobToAppObjectToTransaction != null)
+                                    {
+                                        if (printJobToAppObjectToTransaction.PrintJobItemStatusId == 1)
+                                        {
+                                            @Html.ActionLink("Exclude", "ExcludeFromPrintJob", "Transaction", new
+                                            {
+                                                appObjectToTransactionId = mailing.AppObjectToTransactionId,
+                                                printJobId = Model.CurrentPrintJob.PrintJobId
+                                            }, new
+                                            {
+                                                @class = "btn btn-xs btn-link unpadded-buton"
+                                            })
+                                        }
+                                        else
+                                        {
+                                            @Html.ActionLink("Include", "IncludeFromPrintJob", "Transaction", new
+                                            {
+                                                appObjectToTransactionId = mailing.AppObjectToTransactionId,
+                                                printJobId = Model.CurrentPrintJob.PrintJobId
+                                            }, new
+                                            {
+                                                @class = "btn btn-xs btn-link unpadded-buton"
+                                            })
+                                        }
+                                        @*<br />
+                @Html.ActionLink("Current Print Job", "BackToCurrentPrintJob", "Transaction", new
+                {
+                    printJobId = Model.CurrentPrintJob.PrintJobId,
+                    page = ViewBag.CurrentPrintJobPage,
+                    printJobItemStatusId = ViewBag.CurrentPrintJobItemStatusId
+                }, new
+                {
+                    @class = "btn btn-xs btn-link unpadded-buton"
+                })*@
+                                    }
+                                    else
+                                    {
+                                        if (mailing.ActualPrintDate.HasValue)
+                                        {
+                                            @Html.ActionLink("Mark As Not Printed", "MailingSetPrintStatus", "Transaction", new
+                                             {
+                                                 mailingId = mailing.MailingId,
+                                                 appObjectToTransactionId = mailing.AppObjectToTransactionId
+                                             }, new
+                                             {
+                                                 @class = "btn btn-xs btn-link unpadded-buton"
+                                             })
+                                        }
+                                        else
+                                        {
+                                            @Html.ActionLink("Mark As Printed", "MailingSetPrintStatus", "Transaction", new
+                                             {
+                                                 mailingId = mailing.MailingId,
+                                                 appObjectToTransactionId = mailing.AppObjectToTransactionId
+                                             }, new
+                                             {
+                                                 @class = "btn btn-xs btn-link unpadded-buton"
+                                             })
+                                        }
+                                        <br />
+                                        if (!mailing.ActualPrintDate.HasValue)
+                                        {
+                                            var showAddButton = true;
+                                            if (Model.CurrentPrintJob != null)
+                                            {
+                                                var printJob = Model.CurrentPrintJob;
+                                                if (printJob != null)
+                                                {
+                                                    showAddButton = false;
+                                                }
+                                            }
+
+                                            if (showAddButton)
+                                            {
+                                                @Html.ActionLink("Print", "AddToPrintJob", "Transaction", new
+                                                 {
+                                                     mailingId = mailing.MailingId,
+                                                     printType = mailing.PrintType,
+                                                     scheduledPrintDate = @mailing.ScheduledPrintDate,
+                                                     appObjectToTransactionId = mailing.AppObjectToTransactionId
+                                                 }, new
+                                                 {
+                                                     @class = "btn btn-xs btn-link unpadded-buton"
+                                                 })
+                                            }
+                                        }
+
+                                        if (mailing.PrintType == "Survey")
+                                        {
+                                            if (Model.List == null)
+                                            {
+                                                <br />
+                                                <span>can not complete a survey</span>
+                                            }
+                                            else
+                                            {
+                                                <br />
+                                                @Html.ActionLink("Enter Survey", "Index", "Survey", new { saleId = Model.List.Sales[0].SaleId }, null);
+                                            }
+                                        }
+                                    }
+                                </td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                <td>
+                                    @mailing.PrintType
+                                </td>
+                                <td>
+                                    @mailing.ScheduledPrintDate.ToShortDateString()
+                                </td>
+                                <td>
+                                    @if (mailing.ActualPrintDate.HasValue)
+                                    {
+                                        @mailing.ActualPrintDate.Value.ToShortDateString()
+                                        ;
+                                    }
+                                </td>
+                            </tr>
+
+                        }
+                    }
+                }
+            </table>
+        </article>
+    </div>
+</section>
+<aside id="sidebar" class="col-lg-4 col-md-4 col-sm-12">
+    <article>
+        <h2>MRC Data</h2>
+        <table class="table table-condensed table-responsive sidebar-shadow">
+            <tr>
+                <th>Actions</th>
+                <th>Mrc Id</th>
+            </tr>
+            <tr>
+                <td>
+                    @using (Html.BeginForm("SaveTransactionStatus", "Transaction", FormMethod.Post))
+                    {
+                    @Html.AntiForgeryToken()
+                    <input id="transactionid" name="transactionid" type="hidden" value="@Model.Transaction.TransactionId" />
+                        var active = Model.Transaction.Active == "A" ? "Deactivate" : "Activate";
+                    <input id="activeFlag" name="activeFlag" type="hidden" value="@active" />
+                    <button type="submit" class="btn btn-xs btn-link unpadded-buton">@active</button>
+                    }
+                </td>
+                <td>
+                    @Model.Transaction.TransactionId
+                </td>
+            </tr>
+        </table>
+        <h5>Owner</h5>
+        <table class="table table-condensed table-responsive sidebar-shadow">
+            @{
+                var ownerAgentViewModel = Model.AgentViewModels.SingleOrDefault(a => a.PersonNumber == Model.Transaction.PersonNumber);
+                if (ownerAgentViewModel == null)
+                {
+            <tr>
+                <td class="alert alert-danger">
+                    <strong>No Owner</strong>
+                </td>
+            </tr>
+                }
+                else
+                {
+            <tr>
+                <td colspan="2" class="h5">
+                    @ownerAgentViewModel.RelateToName.LastName ,&nbsp;@ownerAgentViewModel.RelateToName.FirstName
+                </td>
+            </tr>
+            <tr>
+                <th>Contact Information</th>
+                <th>Home Address</th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        @{
+                    var iphone = Convert.ToInt64(ownerAgentViewModel.RelateToPhone.PhoneNumber);
+                    var formattedPhone = String.Format("{0:(###) ###-####}", iphone);
+                                @formattedPhone
+                        }
+                    </div>
+                    <div>
+                        @ownerAgentViewModel.RelateToEmail.EmailAddress
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        @ownerAgentViewModel.RelateToAddress.Address1
+                    </div>
+                    <div>
+                        @ownerAgentViewModel.RelateToAddress.Address2
+                    </div>
+                    <div>
+                        @ownerAgentViewModel.RelateToAddress.City &nbsp;@ownerAgentViewModel.RelateToAddress.State, &nbsp;@ownerAgentViewModel.RelateToAddress.Zip
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="h5">
+                    <br />
+                    @ownerAgentViewModel.Office.FriendlyOfficeName&nbsp;-&nbsp;@ownerAgentViewModel.Office.OfficeId
+                </td>
+            </tr>
+            <tr>
+                <th>Office Information</th>
+                <th>Office Address</th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        Office:
+                        @{
+                    iphone = Convert.ToInt64(@ownerAgentViewModel.Office.Phone);
+                    formattedPhone = String.Format("{0:(###) ###-####}", iphone);
+                                @formattedPhone
+                        }
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        @ownerAgentViewModel.Office.Address
+                    </div>
+                    <div>
+                        @ownerAgentViewModel.Office.City  &nbsp;@ownerAgentViewModel.Office.State,  &nbsp;@ownerAgentViewModel.Office.ZipCode
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Sales Manager
+                </th>
+                <th>
+                    Processing Manager
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        @if (ownerAgentViewModel.OfficeSalesManager.RelateToNames.Any())
+                                {
+                                <span>@ownerAgentViewModel.OfficeSalesManager.RelateToNames.First().LastName, &nbsp;@ownerAgentViewModel.OfficeSalesManager.RelateToNames.First().FirstName</span>
+                                }
+                    </div>
+                    <div>
+                        @if (ownerAgentViewModel.OfficeSalesManager.RelateToPhones.Any())
+                                {
+                                    iphone = Convert.ToInt64(ownerAgentViewModel.OfficeSalesManager.RelateToPhones.First().PhoneNumber);
+                                    formattedPhone = String.Format("{0:(###) ###-####}", iphone);
+                                @formattedPhone
+                                }
+                    </div>
+                    <div>
+                        @if (ownerAgentViewModel.OfficeSalesManager.RelateToEmails.Any())
+                                {
+                                    foreach (var email in ownerAgentViewModel.OfficeSalesManager.RelateToEmails)
+                                    {
+                                <span>@email.EmailAddress</span>
+                                    }
+                                }
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        @if (ownerAgentViewModel.ProcessingManager.RelateToNames.Any())
+                                {
+                                <span>@ownerAgentViewModel.ProcessingManager.RelateToNames.First().LastName, &nbsp;@ownerAgentViewModel.ProcessingManager.RelateToNames.First().FirstName</span>
+                                }
+                    </div>
+                    <div>
+                        @if (ownerAgentViewModel.ProcessingManager.RelateToPhones.Any())
+                                {
+                                    iphone = Convert.ToInt64(ownerAgentViewModel.ProcessingManager.RelateToPhones.First().PhoneNumber);
+                                    formattedPhone = String.Format("{0:(###) ###-####}", iphone);
+                                @formattedPhone
+                                }
+                    </div>
+                    <div>
+                        @if (ownerAgentViewModel.ProcessingManager.RelateToEmails.Any())
+                                {
+                                    foreach (var email in ownerAgentViewModel.ProcessingManager.RelateToEmails)
+                                    {
+                                <span>@email.EmailAddress</span>
+                                    }
+                                }
+                    </div>
+                </td>
+            </tr>
+                }
+            }
+        </table>
+    </article>
+    <article>
+        <h2>Data From OSSII</h2>
+        @if (Model.List == null)
+        {
+        <table class="table table-condensed table-responsive sidebar-shadow">
+            <tr>
+                <td class="alert alert-danger">
+                    <strong>No Data Exists in Weichert Sales and Listings</strong>
+                </td>
+            </tr>
+        </table>
+        }
+        else
+        {
+        <table class="table table-condensed table-responsive sidebar-shadow">
+            @if (Model.List.ListProperty == null)
+                {
+                <tr>
+                    <td class="alert alert-danger">
+                        <strong>No Property Assigned</strong>
+                    </td>
+                </tr>
+                }
+                else
+                {
+                <tr>
+                    <td class="field">List Id</td>
+                    <td>
+                        @Model.List.ListId
+                    </td>
+                </tr>
+                <tr>
+                    <td class="field">Sale Id</td>
+                    <td>
+                        @Model.List.Sales[0].SaleId
+                    </td>
+                </tr>
+                <tr>
+                    <td class="field">Reference Number</td>
+                    <td>
+                        @Model.List.ReferenceNumber
+                    </td>
+                </tr>
+                <tr>
+                    <td class="field">Address 1</td>
+                    <td>
+                        @Model.List.ListProperty.Address1
+                    </td>
+                </tr>
+                <tr>
+                    <td class="field">Address 2</td>
+                    <td>
+                        @Model.List.ListProperty.Address2
+                    </td>
+                </tr>
+                <tr>
+                    <td class="field">City</td>
+                    <td>
+                        @Model.List.ListProperty.City
+                    </td>
+                </tr>
+                <tr>
+                    <td class="field">State</td>
+                    <td>
+                        @Model.List.ListProperty.State
+                    </td>
+                </tr>
+                <tr>
+                    <td class="field">Zip</td>
+                    <td>
+                        @Model.List.ListProperty.ZipCode
+                    </td>
+                </tr>
+                }
+        </table>
+        <h5>List Agents</h5>
+        <table class="table table-condensed table-responsive sidebar-shadow">
+            @{
+            if (!Model.List.ListToAssociates.Any())
+            {
+                <tr>
+                    <td class="alert alert-danger">
+                        <strong>No List Agents Assigned</strong>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <th>Name</th>
+                    <th>Associate Number</th>
+                    <th>Office Id</th>
+                </tr>
+                foreach (var listToAssociate in Model.List.ListToAssociates)
+                {
+                    var agentViewModel = Model.AgentViewModels.SingleOrDefault(a => a.PersonNumber == listToAssociate.PersonNumber);
+                <tr>
+                    <td>
+                        @if (agentViewModel != null)
+                            {
+                            <span>@agentViewModel.RelateToName.LastName ,&nbsp;@agentViewModel.RelateToName.FirstName</span>
+                            }
+                            else
+                            {
+                            <span>Unknown</span>
+                            }
+                    </td>
+                    <td>
+                        @listToAssociate.ListAssociateNumber
+                    </td>
+                    <td>
+                        @listToAssociate.ListAssociateOfficeId
+                    </td>
+                </tr>
+                }
+            }
+            }
+        </table>
+        <h5>Sale Agents</h5>
+        <table class="table table-condensed table-responsive sidebar-shadow">
+            @if (!Model.List.Sales.Any())
+                {
+                <tr>
+                    <td class="alert alert-danger">
+                        <strong>
+                            No Sales Assigned
+                        </strong>
+                    </td>
+                </tr>
+                }
+                else
+                {
+                    if (!Model.List.Sales.SelectMany(s => s.SaleToAssociates).Any())
+                    {
+                <tr>
+                    <td class="alert alert-info">
+                        <strong>No Sale Agents Assigned</strong>
+                    </td>
+                </tr>
+                    }
+                    else
+                    {
+                <tr>
+                    <th>Name</th>
+                    <th>Associate Number</th>
+                    <th>Office Id</th>
+                </tr>
+                        foreach (var saleToAssociate in Model.List.Sales.SelectMany(s => s.SaleToAssociates))
+                        {
+                            var agentViewModel = Model.AgentViewModels.SingleOrDefault(a => a.PersonNumber == saleToAssociate.PersonNumber);
+                <tr>
+                    <td>
+                        @if (agentViewModel != null)
+                                    {
+                                    <span>@agentViewModel.RelateToName.LastName ,&nbsp;@agentViewModel.RelateToName.FirstName</span>
+                                    }
+                                    else
+                                    {
+                                    <span>Unknown</span>
+                                    }
+                    </td>
+                    <td>
+                        @saleToAssociate.SaleAssociateNumber
+                    </td>
+                    <td>
+                        @saleToAssociate.SaleAssociateOfficeId
+                    </td>
+                </tr>
+                        }
+                    }
+                }
+        </table>
+        <h5>Sellers</h5>
+        <table class="table table-condensed table-responsive sidebar-shadow">
+            @if (!Model.List.ListToSellers.Any())
+                {
+                <tr>
+                    <td class="alert alert-danger">
+                        <strong>
+                            No Sellers Assigned
+                        </strong>
+                    </td>
+                </tr>
+                }
+                else
+                {
+                <tr>
+                    <th>Name</th>
+                </tr>
+                    foreach (var seller in Model.List.ListToSellers)
+                    {
+                <tr>
+                    <td>
+                        @seller.FirstName &nbsp; @seller.LastName
+                    </td>
+                </tr>
+                    }
+                }
+        </table>
+        <h5>Buyers</h5>
+        <table class="table table-condensed table-responsive sidebar-shadow">
+            @if (!Model.List.Sales.Any())
+                {
+                <tr>
+                    <td class="alert alert-danger">
+                        <strong>
+                            No Sales Assigned
+                        </strong>
+                    </td>
+                </tr>
+                }
+                else
+                {
+                    if (!Model.List.Sales.SelectMany(s => s.SaleToBuyers).Any())
+                    {
+                <tr>
+                    <td class="alert alert-danger">
+                        <strong>
+                            No Buyers Assigned
+                        </strong>
+                    </td>
+                </tr>
+                    }
+                    else
+                    {
+                <tr>
+                    <th>Name</th>
+                </tr>
+                        foreach (var buyer in Model.List.Sales.SelectMany(s => s.SaleToBuyers))
+                        {
+                <tr>
+                    <td>
+                        @buyer.FirstName &nbsp; @buyer.LastName
+                    </td>
+                </tr>
+                        }
+                    }
+                }
+        </table>
+        }
+    </article>
+</aside>
+@section scripts
+{
+    <script src="~/Scripts/custom/transaction_qa_edit.js"></script>
+    <script src="~/Scripts/custom/_change_request_windows.js"></script>
+    <script src="~/Scripts/custom/_change_request_category.js"></script>
+    <script src="~/Scripts/jquery/validate/jquery.unobtrusive-ajax.min.js"></script>
+}
+@section styles
+{
+    <link href="~/Content/custom/transaction_qa_edit.css" rel="stylesheet" />
+    <link href="~/Content/custom/_change_request_windows.css" rel="stylesheet" />
+}

@@ -1,0 +1,86 @@
+﻿@model AdminPureGold.WebUI.ViewModels.QualityAssuranceIndexViewModel
+<h3>Invalid Addresses</h3>
+<table class="table table-condensed table-responsive sidebar-shadow">
+    <tr>
+        <th>Actions</th>
+        <th>Agents</th>
+        <th>Address 1</th>
+        <th>Address 2</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zip</th>
+        <th>Customer Name</th>
+        <th>Envelope</th>
+    </tr>
+    @foreach (var transaction in Model.Transactions)
+    {
+        var propertyAlternateId = transaction.AtlasXPropertyAlternateId;
+        var alternateProperties = Model.PropertyAlternates.Where(pa => pa.PropertyAlternateId == propertyAlternateId);
+        var alternateProperty = alternateProperties.FirstOrDefault();
+
+        var altAddress1 = alternateProperty == null ? "" : alternateProperty.AltAddress1;
+        var altAddress2 = alternateProperty == null ? "" : alternateProperty.AltAddress2;
+        var altCity = alternateProperty == null ? "" : alternateProperty.AltCity;
+        var altState = alternateProperty == null ? "" : alternateProperty.AltState;
+        var altZip = alternateProperty == null ? "" : alternateProperty.AltZip;
+
+        var presentationDetails = transaction.PresentationDetail;
+        var customerName = presentationDetails == null ? "" : presentationDetails.CustomerName;
+        var envelope = presentationDetails == null ? "" : presentationDetails.LeaveBehindLetterName;
+
+        <tr>
+            <td>
+                @Html.ActionLink("Quality Assurance", "QualityAssuranceEditByTransactionId", "Transaction",
+                    new { transactionId = transaction.TransactionId },
+                 new { @class = "btn btn-xs btn-link unpadded-buton" })
+            </td>
+            <td>
+                @if (!transaction.TransactionToRelates.Any(t => t.Active == "A"))
+                {
+                    <div class="shadow-on-text red-text">Missing</div>
+                }
+                else
+                {
+                    foreach (var transactionToRelate in transaction.TransactionToRelates)
+                    {
+                        if (transactionToRelate.Active == "A")
+                        {
+                            var agentPerson = Model.AgentViewModels.SingleOrDefault(avm =>
+                                avm.PersonNumber == transactionToRelate.PersonNumber);
+
+                            if (agentPerson != null)
+                            {
+                                <div>@agentPerson.RelateToName.LastName, &nbsp;@agentPerson.RelateToName.FirstName</div>
+                            }
+                            else
+                            {
+                                <div class="shadow-on-text red-text">Can't Find Person Number</div>
+                            }
+                        }
+                    }
+                }
+            </td>
+            <td class="red-text shadow-on-text">
+                @altAddress1
+            </td>
+            <td class="red-text shadow-on-text">
+                @altAddress2
+            </td>
+            <td class="red-text shadow-on-text">
+                @altCity
+            </td>
+            <td class="red-text shadow-on-text">
+                @altState
+            </td>
+            <td class="red-text shadow-on-text">
+                @altZip
+            </td>
+            <td>
+                @customerName
+            </td>
+            <td>
+                @envelope
+            </td>
+        </tr>
+    }
+</table>

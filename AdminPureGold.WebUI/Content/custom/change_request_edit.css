@@ -1,0 +1,11 @@
+﻿#categorySelection, #statusSelection {
+    height: 28px;
+    width: 140px;
+    padding: 5px 5px 5px 5px;
+    border: 1px solid #c0c0c0;
+}
+
+#categoryDropDown, #statusDropDown {
+    width: 70px;
+    border: 1px solid #c0c0c0;
+}

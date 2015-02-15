@@ -1,0 +1,96 @@
+﻿@model AdminPureGold.WebUI.ViewModels.SurveySearchViewModel
+
+@{
+    ViewBag.Title = "Survey Search";
+}
+@section header
+{
+    <h2>Search For a Survey Customer</h2>
+}
+<article class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <table>
+        <tr>
+            <td>
+                @using (Html.BeginForm("Search", "Survey", FormMethod.Get))
+                {
+                    @Html.AntiForgeryToken()
+                    <table class="table table-condensed table-responsive sidebar-shadow">
+                        <tr>
+                            <td>
+                                <input id="referenceNumber" name="referenceNumber" type="text" placeholder="reference number" />
+                            </td>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-xs btn-primary">Search</button>
+                            </td>
+                        </tr>
+                    </table>
+                }
+            </td>
+        </tr>
+    </table>
+</article>
+<article class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <table class="table table-condensed table-responsive sidebar-shadow">
+        @{
+            if (Model == null)
+            {
+                <tr>
+                    <td class="alert alert-info">
+                        <strong>No Sale Found With That Reference Number</strong>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                if (Model.ClosedSale != null)
+                {
+                    <tr>
+                        <th>Actions</th>
+                        <th>Property</th>
+                        <th>Customer Information</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.ActionLink("Enter Survey", "Index", "Survey", new { saleId = Model.ClosedSale.SaleId }, null)
+                        </td>
+                        <td>
+                            @Model.List.ListProperty.Address1
+                            @Model.List.ListProperty.Address2
+                            <br />
+                            @Model.List.ListProperty.City
+                            @Model.List.ListProperty.State
+                            @Model.List.ListProperty.ZipCode
+                        </td>
+                        <td>
+                            @foreach (var buyer in Model.ClosedSale.SaleToBuyers)
+                            {
+                                <div>@buyer.LastName, @buyer.FirstName </div>
+                            }
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td class="alert alert-info">
+                            <strong>No Sale Found With That Reference Number</strong>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </table>
+
+</article>
+
+@section scripts
+{
+    <script src="~/Scripts/custom/add_customer.js"></script>
+}
+@section styles
+{
+    <link href="~/Content/custom/add_customer.css" rel="stylesheet" />
+}

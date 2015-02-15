@@ -1,0 +1,121 @@
+﻿@model AdminPureGold.WebUI.ViewModels.SurveyViewModel
+@{
+    ViewBag.Title = "Viewing Survey";
+}
+
+<h2>Viewing Survey For: @ViewBag.Address</h2>
+
+<section class="col-lg-10 col-md-10">
+
+
+    @using (Html.BeginForm())
+    {
+        <input id="saleId" name="saleId" type="hidden" value="@ViewBag.SaleId" />
+
+        @ViewBag.Items
+        @Html.AntiForgeryToken()
+
+        if (Model != null)
+        {
+            foreach (var survey in Model.Surveys) // Loop Through All Choices
+            {
+                <input id="txtSurvey" name="txtSurvey" type="hidden" value="@survey.SurveyId" />
+            }
+        }
+        <table class="table table-condensed table-responsive sidebar-shadow">
+            @if (Model == null)
+            {
+                <tr>
+                    <td class="alert alert-info">
+                        <strong>No Questions Found</strong>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                foreach (var surveyQuestion in Model.SurveyQuestions)  // Loop through Questions
+                {
+                    <tr>
+                        <td>
+                            <h5>@surveyQuestion.QuestionText</h5>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left:100px;">
+                            <table>
+                                @foreach (var surveyChoice in Model.SurveyChoices) // Loop Through All Choices
+                                {
+                                    if (surveyChoice.QuestionId == surveyQuestion.QuestionId) // If the Choice has the same QuestionID
+                                    {
+                                        var isChecked = false;
+                                        var textValue = "";
+                                        foreach (var selectAnswer in Model.SurveyAnswers)  // Loop through User's answers
+                                        {
+                                            if (surveyChoice.ChoiceId == selectAnswer.ChoiceId) // if user has selected it as an answer
+                                            {
+                                                isChecked = true;
+                                                foreach (var textAnswer in Model.SurveyAnswersTexts) // Loop through text
+                                                {
+                                                    if (textAnswer.SurveyAnswerId == selectAnswer.SurveyAnswerId) // Check if there's text for this answer/
+                                                    {
+                                                        textValue = textAnswer.SurveyAnswerUserText;
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        <tr>
+                                            <td>
+                                                @if (surveyChoice.ChoiceTypeId == 1) // Check Box
+                                                {
+                                                    <input disabled="disabled" checked="@isChecked" onchange="JavaScript: SaveCheckBoxValue('@surveyChoice.ChoiceId');" type="checkbox" name="chb_@surveyChoice.ChoiceId" value="@surveyChoice.ChoiceId" data-questionid="@surveyChoice.QuestionId" />
+                                                    @surveyChoice.ChoiceText
+                                                }
+                                                @if (surveyChoice.ChoiceTypeId == 4) // Check Box with Text
+                                                {
+                                                    <input disabled="disabled" checked="@isChecked" onchange="JavaScript: SaveCheckBoxValueAndSetText('@surveyChoice.ChoiceId');" type="checkbox" name="cht_@surveyChoice.ChoiceId" value="@surveyChoice.ChoiceId" data-questionid="@surveyChoice.QuestionId" />
+                                                    @surveyChoice.ChoiceText
+                                                    <input disabled="disabled" class="text-width" type="text" name="tch_@surveyChoice.ChoiceId" value="@textValue" onkeyup="JavaScript: SaveTextBoxValue('@surveyChoice.ChoiceId');" />
+                                                }
+
+                                                @if (surveyChoice.ChoiceTypeId == 2)  // Radio Button
+                                                {
+                                                    <input disabled="disabled" checked="@isChecked" onclick="JavaScript: SaveRadioButtonValue('@surveyChoice.QuestionId', '@surveyChoice.ChoiceId');" type="radio" name="rdb_@surveyChoice.QuestionId" value="@surveyChoice.ChoiceId" data-questionid="@surveyChoice.QuestionId" />
+                                                    @surveyChoice.ChoiceText
+                                                }
+                                                @if (surveyChoice.ChoiceTypeId == 5)  // Radio Button With Text
+                                                {
+                                                    <input disabled="disabled" checked="@isChecked" onclick="JavaScript: SaveRadioButtonValue('@surveyChoice.QuestionId', '@surveyChoice.ChoiceId');" type="radio" name="rdb_@surveyChoice.QuestionId" value="@surveyChoice.ChoiceId" data-questionid="@surveyChoice.QuestionId" />
+                                                    @surveyChoice.ChoiceText
+                                                    <input disabled="disabled" class="text-width" type="text" onkeyup="JavaScript: SaveTextBoxValueForRadioButton('@surveyChoice.ChoiceId');" name="trb_@surveyChoice.ChoiceId" value="@textValue" />
+                                                }
+
+
+                                                @if (surveyChoice.ChoiceTypeId == 3) // Text Box
+                                                {
+                                                    @surveyChoice.ChoiceText
+                                                    <input disabled="disabled" class="text-width" type="text" name="tch_@surveyChoice.ChoiceId" data-type="fillin" value="@textValue" onkeyup="JavaScript: SaveTextBoxValue('@surveyChoice.ChoiceId');" data-questionid="@surveyChoice.QuestionId" data-choiceid="@surveyChoice.ChoiceId" />
+                                                }
+
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </table>
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    }
+</section>
+@section scripts
+{
+    <script src="~/Scripts/custom/survey.js"></script>
+    <script src="~/Scripts/jquery/validate/jquery.unobtrusive-ajax.min.js"></script>
+}
+@section styles
+{
+    <link href="~/Content/custom/printjob_config.css" rel="stylesheet" />
+    <link href="~/Content/custom/survey.css" rel="stylesheet" />
+}

@@ -1,0 +1,228 @@
+﻿@model AdminPureGold.WebUI.ViewModels.EmailViewModel
+
+@{
+    ViewBag.Title = "Email Reminders";
+}
+@section header{
+    <h2 data-heading="header">Email Reminders - @ViewBag.IsCurrentlyEmailing</h2>
+}
+
+
+<section class="col-lg-10 col-md-10" data-name="datapicker">
+    <table class="table table-condensed table-responsive sidebar-shadow type-date-filter-table">
+        <tr>
+            <td>
+                Email Reminders For:
+            </td>
+            <td colspan="2">
+                Start Range
+            </td>
+            <td colspan="2">
+                End Range
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="dropdown">
+                    <div style="float: left" id="printTypeSelection">@ViewBag.PrintType</div>
+                    <div class="btn btn-xs btn-default" data-toggle="dropdown"><span class="caret"></span></div>
+                    <ul class="dropdown-menu dropdown-menu-left" id="printTypeDropDown">
+                        @{
+                            var statuses = ViewData["PrintTypes"] as List<string>;
+                            if (statuses != null)
+                            {
+                                foreach (var status in statuses)
+                                {
+                                    <li><a href="#">@status.ToString()</a></li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </td>
+            <td>
+                <div data-do-toggle="yes" class="dropdown">
+                    <div style="float: left" id="month1Selection">@ViewBag.Month1</div>
+                    <div class="btn btn-xs btn-default" data-toggle="dropdown"><span class="caret"></span></div>
+                    <ul class="dropdown-menu dropdown-menu-left" id="month1DropDown">
+                        @{
+                            var months = ViewData["Months"] as List<string>;
+                            if (months != null)
+                            {
+                                foreach (var month in months)
+                                {
+                                    <li><a href="#">@month.ToString()</a></li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </td>
+            <td>
+                <div class="dropdown">
+                    <div style="float: left" id="year1Selection">@ViewBag.Year1</div>
+                    <div class="btn btn-xs btn-default" data-toggle="dropdown"><span class="caret"></span></div>
+                    <ul class="dropdown-menu dropdown-menu-left" id="year1DropDown">
+                        @{
+                            var years = ViewData["years"] as List<string>;
+                            if (years != null)
+                            {
+                                foreach (var year in years)
+                                {
+                                    <li><a href="#">@year.ToString()</a></li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </td>
+            <td>
+                <div data-do-toggle="yes" class="dropdown">
+                    <div style="float: left" id="month2Selection">@ViewBag.Month2</div>
+                    <div class="btn btn-xs btn-default" data-toggle="dropdown"><span class="caret"></span></div>
+                    <ul class="dropdown-menu dropdown-menu-left" id="month2DropDown">
+                        @{
+                            if (months != null)
+                            {
+                                foreach (var month in months)
+                                {
+                                    <li><a href="#">@month.ToString()</a></li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </td>
+            <td>
+                <div data-do-toggle="yes" class="dropdown">
+                    <div style="float: left" id="year2Selection">@ViewBag.Year2</div>
+                    <div class="btn btn-xs btn-default" data-toggle="dropdown"><span class="caret"></span></div>
+                    <ul class="dropdown-menu dropdown-menu-left" id="year2DropDown">
+                        @{
+                            if (years != null)
+                            {
+                                foreach (var year in years)
+                                {
+                                    <li><a href="#">@year.ToString()</a></li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </td>
+
+
+            <td>
+                @using (Html.BeginForm("LoadData", "Email", FormMethod.Get))
+                {
+                    <input id="printType" name="printType" type="hidden" value="@ViewBag.PrintType" />
+                    <input id="month1" name="month1" type="hidden" value="@DateTime.Now.Month.ToString()" />
+                    <input id="year1" name="year1" type="hidden" value="@DateTime.Now.Year.ToString()" />
+                    <input id="month2" name="month2" type="hidden" value="@DateTime.Now.AddMonths(1).Month.ToString()" />
+                    <input id="year2" name="year2" type="hidden" value="@DateTime.Now.AddMonths(1).Year.ToString()" />
+                    <button id="load" type="submit" class="btn btn-xs btn-primary">Load</button>
+                }
+            </td>
+        </tr>
+    </table>
+</section>
+<section class="col-lg-10 col-md-10">
+
+    <table class="table table-condensed table-responsive sidebar-shadow type-date-filter-table">
+        @if (Model == null)
+        {
+            <tr>
+                <td>
+                    <strong>Select a Print Type, Date Range, and click the Load button</strong>
+                </td>
+            </tr>
+        }
+        else
+        {
+
+            <tr>
+                <td>
+                    <strong>Number of Customers:</strong>
+                </td>
+                <td>
+                    @Model.PureGoldEmail.Count().ToString()
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Number of Agents To Send To:</strong>
+                </td>
+                <td>
+                    @Model.PureGoldEmail.Select(emails => emails.PersonNumber).Distinct().Count()
+                </td>
+            </tr>
+        }
+
+    </table>
+</section>
+
+@if (ViewBag.IsPostBack == true)
+{
+    <section class="col-lg-10 col-md-10" style="">
+        <div id="includeDatePicker">
+            <div>
+                <table class="table table-condensed table-responsive sidebar-shadow type-date-filter-table">
+                    <tr>
+                        <td>
+                            Set The Due Date:
+                        </td>
+                        <td>
+                            <input class="datepicker" id="dueDate" name="dueDate" value="6/27/2014" />
+                        </td>
+                        <td>
+                            <button id="sendEmails" name="sendEmails" class="btn btn-xs btn-primary">Start Sending Emails</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+    <br /><br />
+}
+    <section class="col-lg-10 col-md-10" style="">
+        <div class="hidden" data-toggle="true">
+            <div class="row h3">
+                <div class="col-lg-5 bg-info" id="divUnsent" name="divUnsent">
+                    Emails to be sent: . . .
+                </div>
+                <div class="col-lg-5 bg-success" id="divSent" name="divSent">
+                    Emails Sent:  . . .
+                </div>
+            </div>
+            <br /><br />
+            <div class="row">
+                <div class="col-lg-10 bg-success" id="lastCheck" name="lastCheck">
+                    Last Check: 
+                </div>
+            </div>
+            <br /><br />
+            <div class="row">
+                <div class="col-lg-10 bg-success">
+                    @Html.ActionLink("Compose an email manually", "Index", "MessageCenter")
+                </div>
+            </div>
+            <br />
+            <div class="row hidden" id="divReset" name="divReset">
+                <div class="col-lg-10 bg-success">
+                    <h2>Emails Have Finished Sending</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+
+@section scripts
+{
+    <script src="~/Scripts/custom/email.js"></script>
+    <script src="~/Scripts/bootstrap/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/jquery/validate/jquery.unobtrusive-ajax.min.js"></script>
+}
+@section styles
+{
+    <link href="~/Content/custom/email.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap/css/bootstrap-datepicker.css" rel="stylesheet" />
+}

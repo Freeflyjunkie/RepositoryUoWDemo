@@ -1,0 +1,34 @@
+﻿@model AdminPureGold.Domain.Models.Mrc.ChangeRequestCategory
+
+@switch (Model.ChangeRequestCategoryId)
+{
+    case 400:
+        <img alt="@Model.ChangeRequestDescription" title="Address Change" 
+             src="~/Images/Common/cr_cat_address2.png" class="img-responsive pg-tooltip" />
+        break;
+
+    case 401:
+    <img alt="@Model.ChangeRequestDescription" title="Agent Change"
+         src="~/Images/Common/cr_cat_agent.png" class="img-responsive pg-tooltip" />
+        break;
+
+    case 402:
+    <img alt="@Model.ChangeRequestDescription" title="Customer Name Change"
+         src="~/Images/Common/cr_cat_name2.png" class="img-responsive pg-tooltip" />
+        break;
+
+    case 403:
+    <img alt="@Model.ChangeRequestDescription" title="Customer Removal"
+         src="~/Images/Common/cr_cat_remove2.png" class="img-responsive pg-tooltip" />
+        break;
+
+    case 404:
+    <img alt="@Model.ChangeRequestDescription" title="Special Request"
+         src="~/Images/Common/cr_cat_other.png" class="img-responsive pg-tooltip" />
+        break;
+
+    default:
+    <img alt="@Model.ChangeRequestDescription" title="Unknown, Contact IT!!"
+         src="~/Images/Common/cr_cat_other.png" class="img-responsive pg-tooltip" />
+        break;
+}

@@ -1,0 +1,88 @@
+﻿@model AdminPureGold.WebUI.ViewModels.SurveyViewModel
+@{
+    ViewBag.Title = "Survey Reporting";
+}
+
+@section header{
+    <div class="row">
+        <div class="col-lg-4">
+            <h2>Survey Reporting Detail</h2>
+        </div>
+        <div class="col-lg-8">
+            <h4>Click a reference number to view the survey</h4>
+        </div>
+    </div>
+}
+
+<br />
+<span class="refnum">@ViewBag.Question - @ViewBag.Choice</span>
+<br /><br />
+
+<table cellpadding="3" cellspacing="0" class="table table-condensed table-responsive sidebar-shadow">
+    @if (Model == null)
+    {
+        <tr><td><strong>No details Found</strong></td></tr>
+    }
+    else
+    {
+        <tr>
+            <th>Input </th>
+            <th>RVP </th>
+            <th>Office </th>
+            <th>Reference Number </th>
+            <th>Address </th>
+            <th>[Text]</th>
+        </tr>
+        foreach (var surveyDetail in Model.SurveyReportDetail)  // Loop through Questions
+        {
+            <tr>
+                <td>@surveyDetail.InputDate.Value.ToShortDateString() </td>
+                <td>@surveyDetail.Rvp</td>
+                <td>@surveyDetail.OfficeName</td>
+
+                <td valign="top" class="refnum link" data-hover="sale" data-saleid="@surveyDetail.SaleId">
+                    @surveyDetail.ReferenceNumber
+                </td>
+
+
+                <td>
+                    @surveyDetail.EnvelopeName <br />
+                    @surveyDetail.Address1 <br />
+                    @if (surveyDetail.Address2.ToString().Length > 0)
+                    {
+                        @surveyDetail.Address2 <br />
+                    }
+                    @surveyDetail.City
+                    @surveyDetail.State
+                    @surveyDetail.ZipCode
+                </td>
+
+                <td>
+                    @Html.Raw(Html.Encode(surveyDetail.SurveyAnswerText).Replace("|", "<br />"))
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery/jquery-2.1.0.min.js"></script>
+    <script src="~/Scripts/custom/survey.js"></script>
+    <script src="~/Scripts/jquery/validate/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script>
+        $("table:eq(1) td").css("vertical-align", "top");
+        $("table:eq(1) tr:even").css("background-color", "#eeeeee");
+        $("table:eq(1) tr:odd").css("background-color", "#ffffff");
+    </script>
+
+}
+@section styles
+{
+    <link href="~/Content/custom/survey.css" rel="stylesheet" />
+}
+
+
+
+

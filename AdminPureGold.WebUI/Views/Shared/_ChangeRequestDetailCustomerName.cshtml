@@ -1,0 +1,19 @@
+﻿@model AdminPureGold.ApplicationServices.DTO.ChangeRequestDetailNameParsed
+<table class="table table-condensed table-responsive table-no-margin">
+    <tr>
+        <th style="border-top: none">Previous Name</th>
+        <th style="border-top: none">New Name</th>
+    </tr>
+    <tr>
+        <td>
+            @Model.OldCustomerName
+            <br />
+            @Model.OldEnvelopeName
+        </td>
+        <td>
+            @Model.NewCustomerName
+            <br />
+            @Model.NewEnvelopeName
+        </td>
+    </tr>
+</table>

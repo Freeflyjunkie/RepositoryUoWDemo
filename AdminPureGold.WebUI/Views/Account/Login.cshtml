@@ -1,0 +1,77 @@
+﻿@model AdminPureGold.WebUI.ViewModels.LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+}
+<div class="col-lg-12 col-md-12">
+    <section id="loginForm" class="row title_background">
+        @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-lg-12">
+                    <table id="credentialsTable">
+                        <tr>
+                            <td class="credentials-width-xs"></td>
+                            <td class="credentials-width-sm"></td>
+                            <td class="credentials-width-lg">
+                                <h2>WeichertOne</h2>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                @Html.LabelFor(m => m.UserName, new { @class = "h5" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(m => m.UserName)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                @Html.LabelFor(m => m.Password, new { @class = "h5" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(m => m.Password)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <input id="loginBut" type="submit" value="Log in" class="btn btn-sm btn-primary" />
+                                        </td>
+                                        <td>
+                                            @Html.ValidationMessage("CustomError")
+                                            @Html.ValidationMessageFor(m => m.Password)
+                                            @Html.ValidationMessageFor(m => m.UserName)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        }
+    </section>
+</div>
+@section Scripts {
+    <script src="~/Scripts/jquery/validate/jquery.validate.min.js"></script>
+    <script>
+        $(function () {
+            $('#UserName').focus();
+
+            $('#loginBut').on('click', function () {
+                $('#loginForm').fadeTo(1000, 0.5);
+            });            
+        });
+    </script>
+}
+@section styles
+{
+    <link href="~/Content/custom/login.css" rel="stylesheet" />
+}

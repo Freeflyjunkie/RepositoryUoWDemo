@@ -1,0 +1,10 @@
+﻿#referenceNumber {
+    height: 28px;
+    width: 150px;
+    padding: 5px 5px 5px 5px;
+    border: 1px solid #c0c0c0;
+}
+
+.table {
+    margin-bottom: 5px;
+}

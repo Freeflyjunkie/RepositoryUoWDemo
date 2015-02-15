@@ -1,0 +1,205 @@
+﻿@using System.Activities.Statements
+@using AdminPureGold.ApplicationServices.Enums
+@using AdminPureGold.Domain.Models.AtlasX
+@model AdminPureGold.WebUI.ViewModels.QualityAssuranceIndexViewModel
+
+@{
+    ViewBag.Title = "Quality Assurance Issues";
+}
+@section header
+{
+    <h2>Quality Assurance Issues</h2>
+}
+<div id="filters" class="col-lg-12 col-md-12">
+    @if (Model.IssueType == QualityAssuranceType.InvalidAddress)
+    {
+        <h3>Invalid Addresses</h3>
+    }
+    else if (Model.IssueType == QualityAssuranceType.MissingData)
+    {
+        <h3>Missing Customer</h3>
+    }
+    else if (Model.IssueType == QualityAssuranceType.NoOwnership)
+    {
+        <h3>No Ownership</h3>
+    }
+    else
+    {
+        <h3>Current Print Job</h3>
+    }
+    <table class="table table-condensed table-responsive sidebar-shadow">
+        @if (!Model.Transactions.Any())
+        {
+            <tr>
+                <td class="alert alert-success">
+                    <strong>There Are No Quality Assurance Issues In This Category</strong>
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <th>Actions</th>
+                <th>Agents</th>
+                <th>Property</th>
+                <th>Customer Name</th>
+                <th>Envelope</th>
+            </tr>
+            foreach (var transaction in Model.Transactions)
+            {
+                var propertyAlternateId = transaction.AtlasXPropertyAlternateId;
+                var alternateProperties = Model.PropertyAlternates.Where(pa => pa.PropertyAlternateId == propertyAlternateId).ToList();
+                var alternateProperty = alternateProperties.FirstOrDefault();
+
+                var altAddress1 = alternateProperty == null ? "" : alternateProperty.AltAddress1;
+                var altAddress2 = alternateProperty == null ? "" : alternateProperty.AltAddress2;
+                var altCity = alternateProperty == null ? "" : alternateProperty.AltCity;
+                var altState = alternateProperty == null ? "" : alternateProperty.AltState;
+                var altZip = alternateProperty == null ? "" : alternateProperty.AltZip;
+
+                var presentationDetails = transaction.PresentationDetail;
+                var customerName = presentationDetails == null ? "" : presentationDetails.CustomerName;
+                var envelope = presentationDetails == null ? "" : presentationDetails.LeaveBehindLetterName;
+
+                <tr>
+                    <td>
+                        @Html.ActionLink("Quality Assurance", "QualityAssuranceEditByTransactionId", "Transaction",
+                             new { transactionId = transaction.TransactionId },
+                             new { @class = "btn btn-xs btn-link unpadded-buton" })
+                    </td>
+                    <td>
+                        @*OWNERSHIP QA CHECK*@
+                        @if (!transaction.TransactionToRelates.Any(t => t.Active == "A"))
+                        {
+                            <div title="No agents assigned to the customer" class="shadow-on-text red-text pg-tooltip">Missing</div>
+                        }
+                        else
+                        {
+                            foreach (var transactionToRelate in transaction.TransactionToRelates)
+                            {
+                                if (transactionToRelate.Active == "A")
+                                {
+                                    var agentPerson = Model.AgentViewModels.SingleOrDefault(avm =>
+                                        avm.PersonNumber == transactionToRelate.PersonNumber);
+
+                                    if (agentPerson != null)
+                                    {
+                                        <div>@agentPerson.RelateToName.LastName, &nbsp;@agentPerson.RelateToName.FirstName</div>
+                                    }
+                                    else
+                                    {
+                                        <div title="Report this to IT. Issue finding person" class="shadow-on-text red-text pg-tooltip">Can't Find Person Number</div>
+                                    }
+                                }
+                            }
+                        }
+                    </td>
+                    @*PROPERTY QA CHECK*@
+                    @{
+                        var valid = transaction.AtlasXPropertyId != 440000000;
+                        var classes = "";
+                        var title = "";
+                        if (!valid)
+                        {
+                            classes = "red-text shadow-on-text pg-tooltip";
+                            title = "Address failed validation with the USPS";
+                        }
+                        <td>
+                            <div title="@title" class="@classes">
+                                @altAddress1
+                                @altAddress2
+                                <br />
+                                @altCity
+                                @altState
+                                @altZip
+                            </div>
+                        </td>
+                    }
+                    <td>
+                        @*CUSTOMER QA CHECK*@
+                        @if (transaction.PresentationDetail == null)
+                        {
+                            <div title="Missing customer information" class="shadow-on-text red-text pg-tooltip">Missing</div>
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(transaction.PresentationDetail.CustomerName))
+                            {
+                                <div title="Missing customer information" class="shadow-on-text red-text pg-tooltip">Missing</div>
+                            }
+                            else
+                            {
+                                @customerName
+                            }
+                        }
+                    </td>
+                    <td>
+                        @*CUSTOMER QA CHECK*@
+                        @if (transaction.PresentationDetail == null)
+                        {
+                            <div title="Missing envelope information" class="shadow-on-text red-text pg-tooltip">Missing</div>
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(transaction.PresentationDetail.LeaveBehindLetterName))
+                            {
+                                <div title="Missing envelope information" class="shadow-on-text red-text pg-tooltip">Missing</div>
+                            }
+                            else
+                            {
+                                @envelope
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    @if (Model.Transactions.Any())
+    {
+        <table>
+            <tr>
+                <td>
+                    @if (Model.HasPreviousPage)
+                    {
+                        @Html.ActionLink("First", "QualityAssuranceIndexByType", new { type = (Int32)Model.IssueType, page = 1 }, new { @class = "btn btn-xs btn-primary" })
+                        @Html.Raw("&nbsp;")
+                        ;
+                        @Html.ActionLink("Previous", "QualityAssuranceIndexByType", new { type = (Int32)Model.IssueType, page = Model.PageNumber - 1 }, new { @class = "btn btn-xs btn-primary" })
+                    }
+                </td>
+                <td>
+                    @if (Model.HasNextPage)
+                    {
+                        @Html.ActionLink("Next", "QualityAssuranceIndexByType", new { type = (Int32)Model.IssueType, page = Model.PageNumber + 1 }, new { @class = "btn btn-xs btn-primary" })
+                        @Html.Raw("&nbsp;")
+                        ;
+                        @Html.ActionLink("Last", "QualityAssuranceIndexByType", new { type = (Int32)Model.IssueType, page = Model.PageCount }, new { @class = "btn btn-xs btn-primary" })
+                    }
+                </td>
+                <td>
+                    &nbsp;&nbsp;
+                </td>
+                <td class="blue-text shadow-on-text">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+                    of @Model.PageCount
+                </td>
+                <td>
+                    &nbsp;&nbsp;
+                </td>
+                <td class="blue-text shadow-on-text">
+                    Total @Model.Total
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+@section scripts
+{
+    <script src="~/Scripts/jquery/validate/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/custom/transaction_qa_index.js"></script>
+}
+@section styles
+{
+    <link href="~/Content/custom/transaction_qa_index.css" rel="stylesheet" />
+}

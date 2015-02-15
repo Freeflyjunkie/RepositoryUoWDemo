@@ -1,0 +1,19 @@
+﻿@model AdminPureGold.ApplicationServices.DTO.ChangeRequestDetailAgentParsed
+<table class="table table-condensed table-responsive table-no-margin">
+    <tr>
+        <th style="border-top: none">Agent Change</th>        
+    </tr>
+    <tr>
+        <td>
+            @if (Model.Active == "A")
+            {
+                <strong title="Agent requested that an agent be added to this customer mailing" class="shadow-on-text green-text pg-tooltip">Add</strong>
+            }
+            else
+            {
+                <strong title="Agent requested that an agent be removed from this customer mailing" class="shadow-on-text red-text pg-tooltip">Remove</strong>
+            }            
+            &nbsp;@Model.RelateToName.LastName,&nbsp;@Model.RelateToName.FirstName
+        </td>        
+    </tr>
+</table>

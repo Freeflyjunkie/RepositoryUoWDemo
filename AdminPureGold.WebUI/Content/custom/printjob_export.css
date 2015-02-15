@@ -1,0 +1,16 @@
+﻿#btnExport, #MailMergeBtn {
+    cursor: pointer;
+    height: 61px;
+}
+
+#topTable {
+    margin-bottom: 5px;    
+}
+
+#topTable tbody tr td {
+    padding-top: 10px;
+}
+
+#dvData {
+    display: none;
+}

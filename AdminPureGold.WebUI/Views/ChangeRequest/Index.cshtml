@@ -1,0 +1,185 @@
+﻿@using AdminPureGold.Domain.Models.Mrc
+@using AdminPureGold.WebUI.ViewModels.Common
+@model  AdminPureGold.WebUI.ViewModels.ChangeRequestViewModel
+
+@section header{
+    <h2>Search Change Requests</h2>
+}
+<section class="col-lg-5 col-md-6">
+    <table class="table table-condensed table-responsive sidebar-shadow cat-status-filter-table">
+        <tr>
+            <td>
+                <div class="dropdown">
+                    <div style="float: left" id="statusSelection">All Statuses</div>
+                    <div class="btn btn-xs btn-default" data-toggle="dropdown"><span class="caret"></span></div>
+                    <ul class="dropdown-menu dropdown-menu-left" id="statusDropDown">
+                        @{
+                            var statuses = ViewData["Statuses"] as List<ChangeRequestStatus>;
+                            if (statuses != null)
+                            {
+                                foreach (var status in statuses)
+                                {
+                                    <li><a href="#">@status.ChangeRequestDescription</a></li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </td>
+            <td>
+                <div class="dropdown">
+                    <div style="float: left" id="categorySelection">All Categories</div>
+                    <div class="btn btn-xs btn-default" data-toggle="dropdown"><span class="caret"></span></div>
+                    <ul class="dropdown-menu dropdown-menu-left" id="categoryDropDown">
+                        @{
+                            var categories = ViewData["Categories"] as List<ChangeRequestCategory>;
+                            if (categories != null)
+                            {
+                                foreach (var category in categories)
+                                {
+                                    <li><a href="#">@category.ChangeRequestDescription</a></li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </td>
+            <td>
+                @using (Html.BeginForm("Filter", "ChangeRequest", FormMethod.Get))
+                {
+                    <input id="statusDescription" name="statusDescription" type="hidden" value="" />
+                    <input id="categoryDescription" name="categoryDescription" type="hidden" value="" />
+                    <input id="pageNumber" name="pageNumber" type="hidden" value="1" />
+                    <button id="filter" type="submit" class="btn btn-xs btn-primary">Search</button>
+                }
+            </td>
+        </tr>
+    </table>
+</section>
+<section class="col-lg-7 col-md-6">
+    @using (Html.BeginForm("MostRecent", "ChangeRequest", FormMethod.Get))
+    {
+        <table class="table table-condensed table-responsive sidebar-shadow most-recent-filter-table">
+            <tr>
+                <td style="padding-top: 10px" class="shadow-on-text">
+                    Top
+                </td>
+                <td>
+                    <input id="mostRecentTake" class="shadow-on-text" name="take" type="number" value="10" />
+                </td>
+                <td style="padding-top: 10px" class="shadow-on-text">
+                    Most Recent Comments
+                </td>
+                <td>
+                    <button id="filter" type="submit" class="btn btn-xs btn-primary">Search</button>
+                </td>
+            </tr>
+        </table>
+    }
+</section>
+<section class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <table class="table table-condensed table-responsive sidebar-shadow">
+        @if (Model.ChangeRequests.Any())
+        {
+            <tr>
+                <th>Actions</th>
+                <th>Status</th>
+                <th>Category</th>
+                <th>Details</th>
+                <th>Comments</th>
+            </tr>
+            foreach (var changeRequest in Model.ChangeRequests)
+            {
+                <tr>
+                    <td style="padding-right: 20px">
+                        @Html.Partial("_ChangeRequestActions", new ChangeRequestActionViewModel { ChangeRequest = changeRequest, ControllerName = "ChangeRequest" })
+                    </td>
+                    <td style="padding-right: 20px">@changeRequest.ChangeRequestStatus.ChangeRequestDescription</td>
+                    <td style="width: 80px; vertical-align: top">
+                        @Html.Partial("_ChangeRequestCategory", changeRequest.ChangeRequestCategory)
+                    </td>
+                    <td>
+                        @Html.Partial("_ChangeRequestDetail", new ChangeRequestDetailViewModel
+                        {
+                            ChangeRequest = changeRequest,
+                            ChangeRequestDetailParsed = Model.ChangeRequestDetailParsed.SingleOrDefault(parsed => parsed.ChangeRequestId == changeRequest.ChangeRequestId)
+                        })
+                    </td>
+                    <td style="width: 400px">
+                        @foreach (var changeRequestComment in changeRequest.ChangeRequestComments)
+                        {
+                            var agentViewModel = Model.AgentViewModels.SingleOrDefault(a => a.PersonNumber == changeRequestComment.PersonNumber);
+                            <div class="commentFromPerson">
+                                @if (agentViewModel != null)
+                                {
+                                    <span>@agentViewModel.RelateToName.LastName ,&nbsp; @agentViewModel.RelateToName.FirstName</span>
+                                }
+                            </div>
+                            <div class="commentCreatedDate">
+                                posted on&nbsp;
+                                @if (changeRequestComment.CrDate != null)
+                                {
+                                    @changeRequestComment.CrDate.Value.ToShortDateString()
+                                }
+                            </div>
+                            <div class="comment padding-bottom-8"> @changeRequestComment.Comment </div>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td class="alert alert-info">
+                    No Change Requests Found
+                </td>
+            </tr>
+        }
+    </table>
+    @if (ViewBag.Action == "Filter")
+    {
+        if (Model.ChangeRequests.Any())
+        {
+            <table>
+                <tr>
+                    <td>
+                        @if (Model.HasPreviousPage)
+                        {
+                            @Html.ActionLink("First", "Filter", new { pageNumber = 1, statusDescription = ViewBag.Status, categoryDescription = ViewBag.Category }, new { @class = "btn btn-xs btn-primary" })
+                            @Html.Raw("&nbsp;")
+                            @Html.ActionLink("Previous", "Filter", new { pageNumber = Model.PageNumber - 1, statusDescription = ViewBag.Status, categoryDescription = ViewBag.Category }, new { @class = "btn btn-xs btn-primary" })
+                        }
+                    </td>
+                    <td>
+                        @if (Model.HasNextPage)
+                        {
+                            @Html.ActionLink("Next", "Filter", new { pageNumber = Model.PageNumber + 1, statusDescription = ViewBag.Status, categoryDescription = ViewBag.Category }, new { @class = "btn btn-xs btn-primary" })
+                            @Html.Raw("&nbsp;")
+                            @Html.ActionLink("Last", "Filter", new { pageNumber = Model.PageCount, statusDescription = ViewBag.Status, categoryDescription = ViewBag.Category }, new { @class = "btn btn-xs btn-primary" })
+                        }
+                    </td>
+                    <td>
+                        &nbsp;&nbsp;
+                    </td>
+                    <td class="blue-text shadow-on-text">
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+                        of @Model.PageCount
+                    </td>
+                </tr>
+            </table>
+        }
+    }
+</section>
+
+@section scripts
+{
+    <script src="~/Scripts/custom/change_request_index.js"></script>
+    <script src="~/Scripts/custom/_change_request_windows.js"></script>
+    <script src="~/Scripts/custom/_change_request_category.js"></script>
+}
+@section styles
+{
+    <link href="~/Content/custom/change_request_index.css" rel="stylesheet" />
+    <link href="~/Content/custom/_change_request_windows.css" rel="stylesheet" />
+}

@@ -1,0 +1,278 @@
+﻿@model IEnumerable<AdminPureGold.WebUI.ViewModels.ReassignmentViewModel>
+@{
+    ViewBag.Title = "Retrieve Customer List";
+}
+<article class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <table>
+        <tr>
+            <td>
+                <h2>Customer History For </h2>
+            </td>
+            <td style="width: 25px">
+                <img id="loadingAgents" src="~/Images/loading.gif" style="display: none" alt="" />
+            </td>
+            <td>
+                <div class="dropdown">
+                    <input id="agentSelection"
+                           type="text"
+                           class="dropdown-toggle"
+                           data-toggle="dropdown"
+                           placeholder="last name, first name" />
+                    <ul class="dropdown-menu" id="agentDropDown"></ul>
+                </div>
+            </td>
+            <td>
+                @using (Html.BeginForm("GetAgentCustomerHistory", "Reassignment", FormMethod.Get))
+                {
+                    <input id="selectedPersonNumber" name="selectedPersonNumber" type="hidden" value="" />
+                    <input id="getHistoryBtn" type="submit" disabled="disabled" class="btn btn-sm btn-primary" value="Get" />
+                }
+            </td>
+        </tr>
+    </table>
+    @if (ViewBag.PersonNumber != null)
+    {
+        <div>
+            <h3>Customer History For @ViewBag.PersonName</h3>
+        </div>
+        <table class="table table-condensed table-responsive sidebar-shadow">
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td class="alert alert-info">
+                        <strong>No Customers Found</strong>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <th>Actions</th>
+                    <th><button type="submit" id="reassignAllBtn" class="btn btn-xs btn-link unpadded-buton">Bulk Reassign</button></th>
+                    @*<th>Quality Assurance Issues</th>*@
+                    <th>Primary Agent</th>
+                    <th>Property</th>
+                    <th>Customer Name</th>
+                    <th>Envelope</th>
+                </tr>
+            }
+            @foreach (var viewModel in Model)
+            {
+                var agentsText = new Dictionary<string, int>();
+                var allAgents = viewModel.Transaction.TransactionToRelates.ToList();
+                if (allAgents.Any())
+                {
+                    foreach (var agent in allAgents)
+                    {
+                        var isPrimaryAgent = 0;
+                        if (agent.Active == "A" && agent.SortOrder == 1)
+                        {
+                            isPrimaryAgent = 1;
+                        }
+                        else
+                        {
+                            isPrimaryAgent = 0;
+                        }
+
+                        var agentInformation = viewModel.AgentViewModels.SingleOrDefault(a => a.PersonNumber == agent.PersonNumber);
+                        if (agentInformation != null)
+                        {
+                            if (!agentsText.ContainsKey(agentInformation.RelateToName.LastName + ", " + agentInformation.RelateToName.FirstName))
+                            {
+                                agentsText.Add(agentInformation.RelateToName.LastName + ", " + agentInformation.RelateToName.FirstName, isPrimaryAgent);
+                            }
+                        }
+                    }
+                }
+                <tr>
+                    <td>
+                        @using (Html.BeginForm("QualityAssuranceEditByTransactionId", "Transaction",
+                            new { transactionId = viewModel.Transaction.TransactionId }, FormMethod.Post))
+                        {
+                            <button type="submit" class="btn btn-xs btn-link unpadded-buton">Quality Assurance</button>
+                        }
+                        <button data-transactionid="@viewModel.Transaction.TransactionId" type="submit" class="btn btn-xs btn-link unpadded-buton reassignBtn">Reassign</button>
+                    </td>
+                    <td>
+                        <input type="checkbox" class="checkbox bulk-reassign-checkbox" data-transactionid="@viewModel.Transaction.TransactionId" />
+                    </td>
+                    <td>
+                        @{
+                if (!viewModel.Transaction.TransactionToRelates.Any(t => t.Active == "A" && t.SortOrder == 1))
+                {
+                    foreach (var agent in agentsText)
+                    {
+                        <div title="No agents assigned to the customer" class="red-text shadow-on-text pg-tooltip">@agent.Key</div>
+                    }
+                }
+                else
+                {
+                    foreach (var agent in agentsText)
+                    {
+                        var agentValidationClasses = "";
+                        var agentValidationTitle = "";
+
+                        if (agent.Value == 1)
+                        {
+                            agentValidationClasses = "green-text shadow-on-text pg-tooltip";
+                            agentValidationTitle = "Primary Agent";
+                        }
+                        else
+                        {
+                            agentValidationClasses = "";
+                            agentValidationTitle = "";
+                        }
+                        <div title="@agentValidationTitle" class="@agentValidationClasses">@agent.Key</div>
+                    }
+                }
+                        }
+                    </td>
+                    <td>
+                        @{
+                var validationClasses = "";
+                var validationTitle = "";
+                if (viewModel.Property.PropertyId == 440000000)
+                {
+                    validationClasses = "shadow-on-text red-text pg-tooltip";
+                    validationTitle = "Address failed validation with the USPS";
+                }
+                <div title="@validationTitle" class="@validationClasses">
+                    @viewModel.PropertyAlternate.AltAddress1
+                    @viewModel.PropertyAlternate.AltAddress2
+                    <br />
+                    @viewModel.PropertyAlternate.AltCity
+                    @viewModel.PropertyAlternate.AltState
+                    @viewModel.PropertyAlternate.AltZip
+                </div>
+                        }
+                    </td>
+                    <td>
+                        @if (viewModel.Transaction.PresentationDetail == null)
+                        {
+                            <div title="Missing customer information" class="shadow-on-text red-text pg-tooltip">Missing Customer</div>
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(viewModel.Transaction.PresentationDetail.CustomerName))
+                            {
+                                <div title="Missing customer information" class="shadow-on-text red-text pg-tooltip">Missing Customer</div>
+                            }
+                            else
+                            {
+                                @viewModel.Transaction.PresentationDetail.CustomerName
+                            }
+                        }
+                    </td>
+                    <td>
+                        @if (viewModel.Transaction.PresentationDetail == null)
+                        {
+                            <div title="Missing envelope information" class="shadow-on-text red-text pg-tooltip">Missing Customer</div>
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(viewModel.Transaction.PresentationDetail.LeaveBehindLetterName))
+                            {
+                                <div title="Missing envelope information" class="shadow-on-text red-text pg-tooltip">Missing Customer</div>
+                            }
+                            else
+                            {
+                                @viewModel.Transaction.PresentationDetail.LeaveBehindLetterName
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+        if (Model.Any())
+        {
+            <table>
+                <tr>
+                    <td>
+                        @if (ViewBag.HasPreviousPage)
+                        {
+                            @Html.ActionLink("First", "GetAgentCustomerHistory", new { selectedPersonNumber = ViewBag.PersonNumber, page = 1 }, new { @class = "btn btn-xs btn-primary" })
+                            @Html.Raw("&nbsp;")
+                            @Html.ActionLink("Previous", "GetAgentCustomerHistory", new { selectedPersonNumber = ViewBag.PersonNumber, page = ViewBag.PageNumber - 1 }, new { @class = "btn btn-xs btn-primary" })
+                        }
+                    </td>
+                    <td>
+                        @if (ViewBag.HasNextPage)
+                        {
+                            @Html.ActionLink("Next", "GetAgentCustomerHistory", new { selectedPersonNumber = ViewBag.PersonNumber, page = ViewBag.PageNumber + 1 }, new { @class = "btn btn-xs btn-primary" })
+                            @Html.Raw("&nbsp;")
+                            @Html.ActionLink("Last", "GetAgentCustomerHistory", new { selectedPersonNumber = ViewBag.PersonNumber, page = ViewBag.PageCount }, new { @class = "btn btn-xs btn-primary" })
+                        }
+                    </td>
+                    <td>
+                        &nbsp;&nbsp;
+                    </td>
+                    <td class="blue-text shadow-on-text">
+                        Page @(ViewBag.PageCount < ViewBag.PageNumber ? 0 : ViewBag.PageNumber)
+                        of @ViewBag.PageCount
+                    </td>
+                    <td>
+                        &nbsp;&nbsp;
+                    </td>
+                    <td class="blue-text shadow-on-text">
+                        Total @ViewBag.Total
+                    </td>
+                </tr>
+            </table>
+        }
+    }
+</article>
+<div class="modal fade" id="reassignWindow" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+                <h3>Reassign Customer</h3>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td style="width: 25px">
+                            <img id="loadingReassignToAgent" src="~/Images/loading.gif" style="display: none" />
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <input id="reassignToAgentSelection"
+                                       type="text"
+                                       class="dropdown-toggle"
+                                       data-toggle="dropdown"
+                                       autocomplete="off"
+                                       placeholder="last name, first name" />
+                                <ul class="dropdown-menu" id="reassignToAgentDropDown"></ul>
+                            </div>
+                        </td>
+                        <td>
+                            @using (Html.BeginForm("Reassign", "Reassignment", FormMethod.Get))
+                            {
+                                <input id="reassignToAgentForTransactionId" name="transactionId" type="hidden" />
+                                <input id="reassignToAgentSelectedPersonNumber" name="selectedPersonNumber" type="hidden" value="@ViewBag.PersonNumber" />
+                                <input id="reassignToAgentPersonNumber" name="personNumber" type="hidden" value="" />
+                                <input id="reassignToAgentRelationshipNumber" name="relationshipNumber" type="hidden" value="" />
+                                <input id="reassignToAgentOfficeId" name="officeId" type="hidden" value="" />
+                                <button id="reassignBtn" disabled="disabled" type="submit" class="btn btn-sm btn-primary">Reassign</button>
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="closeWindow" class="btn btn-sm btn-primary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/Scripts/custom/retrieve.js"></script>
+}
+@section styles
+{
+    <link href="~/Content/custom/retrieve.css" rel="stylesheet" />
+}
+
+
+

@@ -1,0 +1,43 @@
+﻿@model AdminPureGold.WebUI.ViewModels.QualityAssuranceIndexViewModel
+
+<div class="col-lg-12 col-md-12 col-sm-8">
+    <h3>Bing Address Suggestion</h3>
+    <table class="table table-condensed table-responsive">
+        <tr>
+            <td><strong>Address</strong></td>
+            @{
+                var addressBackgroundColor = Model.BingLocation.IsAddressMatch ? "#ffffff" : "#b0c4de";
+            }
+            <td style="background-color: @addressBackgroundColor">@Model.BingLocation.Address</td>
+        </tr>
+        <tr>
+            <td><strong>City</strong></td>
+            @{
+                var cityBackgroundColor = Model.BingLocation.IsCityMatch ? "#ffffff" : "#b0c4de";
+            }
+            <td style="background-color: @cityBackgroundColor">@Model.BingLocation.City</td>
+        </tr>
+        <tr>
+            <td><strong>State</strong></td>
+            @{
+                var stateBackgroundColor = Model.BingLocation.IsStateMatch ? "#ffffff" : "#b0c4de";
+            }
+            <td style="background-color: @stateBackgroundColor">@Model.BingLocation.State</td>
+        </tr>
+        <tr>
+            <td><strong>Zip</strong></td>
+            @{
+                var zipBackgroundColor = Model.BingLocation.IsZipMatch ? "#ffffff" : "#b0c4de";
+            }
+            <td style="background-color: @zipBackgroundColor">@Model.BingLocation.Zip</td>
+        </tr>
+        <tr>
+            <td><strong>County</strong></td>
+            <td>@Model.BingLocation.County</td>
+        </tr>
+        <tr>
+            <td><strong>Confidence</strong></td>
+            <td>@Model.BingLocation.Confidence</td>
+        </tr>
+    </table>
+</div>

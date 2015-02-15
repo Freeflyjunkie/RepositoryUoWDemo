@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D3C1E616-8351-418B-A2ED-C1C9BD877DF6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AdminPureGold.Repositories</RootNamespace>
+    <AssemblyName>AdminPureGold.Repositories</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.0.2\lib\net40\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.0.2\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EF\AtlasXContext.cs" />
+    <Compile Include="EF\Configurations\AtlasX\WApplicationConfiguration.cs" />
+    <Compile Include="EF\Configurations\AtlasX\WAtlasXConfiguration.cs" />
+    <Compile Include="EF\Configurations\AtlasX\WAtlasXToAppConfiguration.cs" />
+    <Compile Include="EF\Configurations\AtlasX\WAtlasXtoAppRoleConfiguration.cs" />
+    <Compile Include="EF\Configurations\AtlasX\WAtlasXtoAppWPersonConfiguration.cs" />
+    <Compile Include="EF\Configurations\AtlasX\PropertyAlternateConfiguration.cs" />
+    <Compile Include="EF\Configurations\AtlasX\PropertyConfiguration.cs" />
+    <Compile Include="EF\Configurations\CorpComm\McMessageConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\AppObjectConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\AppObjectToAttributeConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\AppObjectToTransactionConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\ChangeRequestCategoryConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\ChangeRequestCommentConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\ChangeRequestConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\ChangeRequestStatusConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\LastImportDateConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\PrintExportConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\PrintExportNewsletterConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\PrintJobConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\PrintJobItemStatusConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\PrintJobStatusConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\PrintJobToAppObjectToTransactionConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\PrintJobToWeichertSLConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\PrintJobTypeConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\PureGoldEmailConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\PureGoldEmailSettingsConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\PureGoldMailingConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\SurveyAnswerConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\SurveyAnswerTextConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\SurveyChoiceConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\SurveyChoiceTypeConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\SurveyConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\SurveyQuestionConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\SurveyUserSettingConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\TransactionConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\TransactionTemplateConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\TransactionToContactConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\TransactionToRelateConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\UserProfileConfiguration.cs" />
+    <Compile Include="EF\Configurations\Mrc\UserRequestLogConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeicherCore\OfficeConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeicherCore\PersonToImageConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeicherCore\PersonToRelateConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeicherCore\PersonConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeicherCore\RelateToAddressConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeicherCore\RelateToEmailConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeicherCore\RelateToNameConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeicherCore\RelateToPhoneConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeicherCore\WeichertOneUserConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeichertSL\BuyerGreetingConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeichertSL\ClosingConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeichertSL\ListConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeichertSL\ListPropertyConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeichertSL\ListToAssociateConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeichertSL\ListToSellerConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeichertSL\ListTypeConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeichertSL\PureGoldSaleConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeichertSL\SaleConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeichertSL\SaleToAssociateConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeichertSL\SaleToBrokerConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeichertSL\SaleToBuyerConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeichertSL\SaleTypeConfiguration.cs" />
+    <Compile Include="EF\Configurations\WeichertSL\SourceCdConfiguration.cs" />
+    <Compile Include="EF\CorpCommContext.cs" />
+    <Compile Include="EF\Helpers\ContextHelpers.cs" />
+    <Compile Include="EF\MrcContext.cs" />
+    <Compile Include="EF\Configurations\Mrc\PresentationDetailConfiguration.cs" />
+    <Compile Include="EF\Helpers\StateHelpers.cs" />
+    <Compile Include="EF\WeichertCoreContext.cs" />
+    <Compile Include="EF\WeichertSLContext.cs" />
+    <Compile Include="Interfaces\AtlasX\IPropertyAlternateRepository.cs" />
+    <Compile Include="Interfaces\AtlasX\IPropertyRepository.cs" />
+    <Compile Include="Interfaces\AtlasX\IUnitOfWorkAtlasX.cs" />
+    <Compile Include="Interfaces\AtlasX\IWAtlasXRepository.cs" />
+    <Compile Include="Interfaces\AtlasX\IWAtlasXToAppRepository.cs" />
+    <Compile Include="Interfaces\AtlasX\IWAtlasXToAppWPersonRepository.cs" />
+    <Compile Include="Interfaces\CorpComm\IMcMessageRepository.cs" />
+    <Compile Include="Interfaces\CorpComm\IUnitOfWorkCorpComm.cs" />
+    <Compile Include="Interfaces\IGenericRepository.cs" />
+    <Compile Include="Interfaces\IGenericSqlQueryRepository.cs" />
+    <Compile Include="Interfaces\IUnitOfWork.cs" />
+    <Compile Include="Interfaces\Mrc\IAppObjectToTransactionRepository.cs" />
+    <Compile Include="Interfaces\Mrc\IChangeRequestCommentRepository.cs" />
+    <Compile Include="Interfaces\Mrc\ILastImportDateRepository.cs" />
+    <Compile Include="Interfaces\Mrc\IMrcSqlQueryRepository.cs" />
+    <Compile Include="Interfaces\Mrc\IPrintExportNewsletterRepository.cs" />
+    <Compile Include="Interfaces\Mrc\IPrintExportRepository.cs" />
+    <Compile Include="Interfaces\Mrc\IPrintJobRepository.cs" />
+    <Compile Include="Interfaces\Mrc\IPrintJobToAppObjectToTransactionRepository.cs" />
+    <Compile Include="Interfaces\Mrc\IPureGoldEmailRepository.cs" />
+    <Compile Include="Interfaces\Mrc\IPureGoldEmailSettingRepository.cs" />
+    <Compile Include="Interfaces\Mrc\IPureGoldMailingRepository.cs" />
+    <Compile Include="Interfaces\Mrc\IChangeRequestRepository.cs" />
+    <Compile Include="Interfaces\Mrc\ISurveyRepository.cs" />
+    <Compile Include="Interfaces\Mrc\ISurveyQuestionRepository.cs" />
+    <Compile Include="Interfaces\Mrc\ITransactionRepository.cs" />
+    <Compile Include="Interfaces\Mrc\ITransactionToRelateRepository.cs" />
+    <Compile Include="Interfaces\Mrc\IUnitOfWorkMrc.cs" />
+    <Compile Include="Interfaces\Mrc\IUserProfileRepository.cs" />
+    <Compile Include="Interfaces\Mrc\IUserRequestLogRepository.cs" />
+    <Compile Include="Interfaces\WeichertCore\IOfficeRepository.cs" />
+    <Compile Include="Interfaces\WeichertCore\IPersonRepository.cs" />
+    <Compile Include="Interfaces\WeichertCore\IPersonToRelateRepository.cs" />
+    <Compile Include="Interfaces\WeichertCore\IRelateToAddressRespository.cs" />
+    <Compile Include="Interfaces\WeichertCore\IRelateToEmailRepository.cs" />
+    <Compile Include="Interfaces\WeichertCore\IRelateToNameRepository.cs" />
+    <Compile Include="Interfaces\WeichertCore\IRelateToPhoneRepository.cs" />
+    <Compile Include="Interfaces\WeichertCore\IUnitOfWorkCore.cs" />
+    <Compile Include="Interfaces\WeichertCore\IWeichertCoreSqlQueryRepository.cs" />
+    <Compile Include="Interfaces\WeichertCore\IWeichertOneUserRepository.cs" />
+    <Compile Include="Interfaces\WeichertSL\IListRepository.cs" />
+    <Compile Include="Interfaces\WeichertSL\ISaleRepository.cs" />
+    <Compile Include="Interfaces\WeichertSL\IUnitOfWorkSalesListing.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AtlasX\PropertyAlternateRepository.cs" />
+    <Compile Include="Repositories\AtlasX\PropertyRepository.cs" />
+    <Compile Include="Repositories\AtlasX\UnitOfWorkAtlasX.cs" />
+    <Compile Include="Repositories\AtlasX\WAtlasXRepository.cs" />
+    <Compile Include="Repositories\AtlasX\WAtlasXToAppRepository.cs" />
+    <Compile Include="Repositories\AtlasX\WAtlasXToAppWPersonRepository.cs" />
+    <Compile Include="Repositories\CorpComm\McMessageRepository.cs" />
+    <Compile Include="Repositories\CorpComm\UnitOfWorkCorpComm.cs" />
+    <Compile Include="Repositories\GenericRepository.cs" />
+    <Compile Include="Repositories\GenericSqlQueryRepository.cs" />
+    <Compile Include="Repositories\Mrc\AppObjectToTransactionRepository.cs" />
+    <Compile Include="Repositories\Mrc\ChangeRequestCommentRepository.cs" />
+    <Compile Include="Repositories\Mrc\LastImportDateRepository.cs" />
+    <Compile Include="Repositories\Mrc\MrcSqlQueryRepository.cs" />
+    <Compile Include="Repositories\Mrc\PrintExportNewsletterRepository.cs" />
+    <Compile Include="Repositories\Mrc\PrintExportRepository.cs" />
+    <Compile Include="Repositories\Mrc\PrintJobRepository.cs" />
+    <Compile Include="Repositories\Mrc\PrintJobToAppObjectToTransactionRepository.cs" />
+    <Compile Include="Repositories\Mrc\PureGoldEmailRepository.cs" />
+    <Compile Include="Repositories\Mrc\PureGoldEmailSettingRepository.cs" />
+    <Compile Include="Repositories\Mrc\PureGoldMailingRepository.cs" />
+    <Compile Include="Repositories\Mrc\ChangeRequestRepository.cs" />
+    <Compile Include="Repositories\Mrc\SurveyQuestionRepository.cs" />
+    <Compile Include="Repositories\Mrc\SurveyRepository.cs" />
+    <Compile Include="Repositories\Mrc\TransactionRepository.cs" />
+    <Compile Include="Repositories\Mrc\TransactionToRelateRepository.cs" />
+    <Compile Include="Repositories\Mrc\UnitOfWorkMrc.cs" />
+    <Compile Include="Repositories\Mrc\UserProfileRepository.cs" />
+    <Compile Include="Repositories\Mrc\UserRequestLogRepository.cs" />
+    <Compile Include="Repositories\WeichertCore\OfficeRepository.cs" />
+    <Compile Include="Repositories\WeichertCore\PersonRepository.cs" />
+    <Compile Include="Repositories\WeichertCore\PersonToRelateRepository.cs" />
+    <Compile Include="Repositories\WeichertCore\RelateToAddressRepository.cs" />
+    <Compile Include="Repositories\WeichertCore\RelateToEmailRepository.cs" />
+    <Compile Include="Repositories\WeichertCore\RelateToNameRepository.cs" />
+    <Compile Include="Repositories\WeichertCore\RelateToPhoneRepository.cs" />
+    <Compile Include="Repositories\WeichertCore\UnitOfWorkCore.cs" />
+    <Compile Include="Repositories\WeichertCore\WeichertCoreSqlQueryRepository.cs" />
+    <Compile Include="Repositories\WeichertCore\WeichertOneUserRepository.cs" />
+    <Compile Include="Repositories\WeichertSL\ListRepository.cs" />
+    <Compile Include="Repositories\WeichertSL\SaleRepository.cs" />
+    <Compile Include="Repositories\WeichertSL\UnitOfWorkSalesListing.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AdminPureGold.Domain\AdminPureGold.Domain.csproj">
+      <Project>{b72489ab-1051-4358-a0d8-bff7880b9e9d}</Project>
+      <Name>AdminPureGold.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
